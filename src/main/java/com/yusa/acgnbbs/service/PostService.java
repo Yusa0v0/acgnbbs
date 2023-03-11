@@ -25,7 +25,6 @@ public interface PostService extends IService<Post> {
     ResponseResult novelPostList(int pageNum, int pageSize);
     ResponseResult userPostList(int pageNum, int pageSize,int userId);
 
-    void addViewTimes(int postId);
 
     /**
      * 帖子详情

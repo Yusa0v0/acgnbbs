@@ -103,23 +103,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         // 转换成VO
         return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
     }
-
-    @Override
-    public void addViewTimes(int postId) {
-        LambdaQueryWrapper<Post> lambdaQueryWrapper =new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getId, postId);
-        Post post = postMapper.selectOne(lambdaQueryWrapper);
-        post.setViewTimes(post.getViewTimes()+1);
-        postMapper.updateById(post);
-    }
-
     @Override
     public ResponseResult postDetails(int id) {
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getId,id);
-        List<Post> posts = list(lambdaQueryWrapper);
-        List<PostDetailsVO> postDetailsVOList=BeanCopyUtils.copyBeanList(posts, PostDetailsVO.class);
-        PostDetailsVO postDetailsVO = postDetailsVOList.get(0);
+        Post post = postMapper.selectOne(lambdaQueryWrapper);
+        post.setViewTimes(post.getViewTimes()+1);
+        postMapper.updateById(post);
+        PostDetailsVO postDetailsVO=BeanCopyUtils.copyBean(post, PostDetailsVO.class);
         return ResponseResult.okResult(postDetailsVO);
     }
 

@@ -105,6 +105,15 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
+    public void addViewTimes(int postId) {
+        LambdaQueryWrapper<Post> lambdaQueryWrapper =new LambdaQueryWrapper();
+        lambdaQueryWrapper.eq(Post::getId, postId);
+        Post post = postMapper.selectOne(lambdaQueryWrapper);
+        post.setViewTimes(post.getViewTimes()+1);
+        postMapper.updateById(post);
+    }
+
+    @Override
     public ResponseResult postDetails(int id) {
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getId,id);

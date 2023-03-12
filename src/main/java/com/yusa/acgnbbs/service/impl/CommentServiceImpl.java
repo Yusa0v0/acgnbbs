@@ -9,6 +9,7 @@ import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.CommentMapper;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.CommentService;
+import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
@@ -26,6 +27,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     UserMapper userMapper;
     @Autowired
+    UserServiceImpl userService;
+    @Autowired
     SecurityUitl securityUitl;
     @Override
     public ResponseResult postComment(int pageNum, int pageSize,int postId) {
@@ -33,7 +36,15 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         lambdaQueryWrapper.eq(Comment::getPostId, postId);
         List<Comment> comments = list(lambdaQueryWrapper);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(comments, CommentVO.class));
+        List<CommentVO> commentVOList = BeanCopyUtils.copyBeanList(comments, CommentVO.class);
+        for (CommentVO commentVO: commentVOList) {
+            Integer userId = commentVO.getUserId();
+            String userAvatar = userService.getUserAvatar(userId);
+            String username =userService.getUsername(userId);
+            commentVO.setAvatar(userAvatar);
+            commentVO.setUsername(username);
+        }
+        return ResponseResult.okResult(commentVOList);
     }
 
     @Override

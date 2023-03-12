@@ -7,6 +7,8 @@ public class CommentVO {
 
     private Integer userId;
 
+    private String username;
+
     private Integer postId;
 
     private String content;
@@ -15,6 +17,23 @@ public class CommentVO {
 
     private Date createdAt;
 
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
 
     public Integer getId() {
         return id;

@@ -39,4 +39,20 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOne(lambdaQueryWrapper);
         return new ResponseResult(200,"OK",user);
     }
+    public String getUserAvatar(int id){
+        LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getId,id);
+        User user = userMapper.selectOne(lambdaQueryWrapper);
+        String avatar = user.getAvatar();
+        return avatar;
+    }
+
+    @Override
+    public String getUsername(int id) {
+        LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(User::getId,id);
+        User user = userMapper.selectOne(lambdaQueryWrapper);
+        String username = user.getUsername();
+        return username;
+    }
 }

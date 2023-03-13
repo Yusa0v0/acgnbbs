@@ -13,13 +13,13 @@ import static com.yusa.acgnbbs.constants.SystemConstants.COMMENT_PAGE_SIZE;
 public class CommentController {
     @Autowired
     private CommentService commentService;
-    @GetMapping("/postCommentList/{postId}/{pageNum}")
-    public ResponseResult postCommentList(@PathVariable("pageNum") int pageNum,@PathVariable("postId") int postId){
-        return commentService.postComment( pageNum,  COMMENT_PAGE_SIZE,postId);
+    @GetMapping("/postCommentList/{postId}/{currentPage}/{pageSize}")
+    public ResponseResult postCommentList(@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize,@PathVariable("postId") int postId){
+        return commentService.postComment( currentPage,  pageSize,postId);
     }
-    @GetMapping("/userCommentList/{userId}/{pageNum}")
-    public ResponseResult userCommentList(@PathVariable("pageNum") int pageNum,@PathVariable("userId") int userId){
-        return commentService.userComment(pageNum,COMMENT_PAGE_SIZE,userId);
+    @GetMapping("/userCommentList/{userId}/{currentPage}/{pageSize}")
+    public ResponseResult userCommentList(@PathVariable("currentPage") int currentPage,@PathVariable("pageSize")int pageSize,@PathVariable("userId") int userId){
+        return commentService.userComment(currentPage,pageSize,userId);
     }
     @PostMapping("/addComment")
     public ResponseResult addComment(@RequestBody Comment comment){

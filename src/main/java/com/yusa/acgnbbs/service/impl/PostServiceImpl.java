@@ -6,8 +6,10 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.domain.entity.Comment;
 import com.yusa.acgnbbs.domain.entity.Post;
 import com.yusa.acgnbbs.domain.entity.User;
+import com.yusa.acgnbbs.mapper.CommentMapper;
 import com.yusa.acgnbbs.mapper.PostMapper;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.PostService;
@@ -36,6 +38,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     PostMapper postMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    CommentMapper commentMapper;
     @Override
     public ResponseResult hotPostList() {
         return null;
@@ -111,6 +115,12 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         post.setViewTimes(post.getViewTimes()+1);
         postMapper.updateById(post);
         PostDetailsVO postDetailsVO=BeanCopyUtils.copyBean(post, PostDetailsVO.class);
+
+        LambdaQueryWrapper<Comment> lambdaQueryWrapper1 = new LambdaQueryWrapper();
+        lambdaQueryWrapper1.eq(Comment::getPostId,id);
+        List<Comment> comments = commentMapper.selectList(lambdaQueryWrapper1);
+        int commentNum = comments.size();
+        postDetailsVO.setCommentNum(commentNum);
         return ResponseResult.okResult(postDetailsVO);
     }
 

@@ -46,10 +46,12 @@ public class LoginServiceImpl implements LoginService {
         //生成jwt给前端
         LoginUser loginUser =(LoginUser) (authenticate.getPrincipal());
         Integer id = loginUser.getUser().getId();
+        String avatar = loginUser.getUser().getAvatar();
         String jwt = JwtUtils.createJWT(id.toString());
         Map map =new HashMap<String,String>();
         map.put("token",jwt);
         map.put("userId",id);
+        map.put("avatar",avatar);
         System.out.println(loginUser);
         redisCache.setCacheObject("login:"+id,loginUser);
 //        JwtUtils.
@@ -87,12 +89,15 @@ public class LoginServiceImpl implements LoginService {
             // TODO
             List<String> list =new ArrayList<>(Arrays.asList("aAdmin","cAdmin","gAdmin","nAdmin"));
             LoginUser loginUser= new LoginUser(user1,list,false);
-            //生成jwt给前端
+
             Integer id = loginUser.getUser().getId();
+            String avatar = loginUser.getUser().getAvatar();
+            //生成jwt给前端
             String jwt = JwtUtils.createJWT(id.toString());
             Map map =new HashMap<String,String>();
             map.put("token",jwt);
             map.put("userId",user1.getId());
+            map.put("avatar",avatar);
             System.out.println(loginUser);
             redisCache.setCacheObject("login:"+id,loginUser);
 //        JwtUtils.

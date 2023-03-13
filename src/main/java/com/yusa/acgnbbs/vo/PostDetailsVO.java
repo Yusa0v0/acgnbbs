@@ -4,20 +4,14 @@ import java.util.Date;
 
 public class PostDetailsVO {
     private Integer id;
-
     private String title;
-
     private Integer viewTimes;
-
     private Integer authorId;
-
     private Integer categoryId;
-
     private String content;
-
     private Date createdAt;
-
     private Date updateAt;
+    private Integer commentNum;
 
     public Integer getId() {
         return id;
@@ -81,6 +75,14 @@ public class PostDetailsVO {
 
     public void setUpdateAt(Date updateAt) {
         this.updateAt = updateAt;
+    }
+
+    public Integer getCommentNum() {
+        return commentNum;
+    }
+
+    public void setCommentNum(Integer commentNum) {
+        this.commentNum = commentNum;
     }
 
     @Override

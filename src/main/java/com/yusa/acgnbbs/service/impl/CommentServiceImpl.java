@@ -1,6 +1,7 @@
 package com.yusa.acgnbbs.service.impl;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
@@ -31,7 +32,10 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     @Autowired
     SecurityUitl securityUitl;
     @Override
-    public ResponseResult postComment(int pageNum, int pageSize,int postId) {
+    public ResponseResult postComment(int currentPage, int pageSize,int postId) {
+        Page page = PageHelper.startPage(currentPage, pageSize);
+        long total = page.getTotal();
+        System.out.println(total);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Comment::getPostId, postId);
         List<Comment> comments = list(lambdaQueryWrapper);
@@ -44,12 +48,13 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
             commentVO.setAvatar(userAvatar);
             commentVO.setUsername(username);
         }
+
         return ResponseResult.okResult(commentVOList);
     }
 
     @Override
-    public ResponseResult userComment(int pageNum, int pageSize,int userId) {
-        PageHelper.startPage(pageNum, pageSize);
+    public ResponseResult userComment(int currentPage, int pageSize,int userId) {
+        PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Comment::getUserId, userId);
         List<Comment> comments = list(lambdaQueryWrapper);
@@ -59,8 +64,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResponseResult addComment(Comment comment) {
-        int id = securityUitl.getUserId();
-        comment.setUserId(id);
+        int frontId = comment.getUserId();
+        int loginId = securityUitl.getUserId();
+        if(frontId!=loginId){
+            return new ResponseResult(403,"评论失败",null);
+        }
+        comment.setUserId(loginId);
         comment.setLikeTimes(0);
         comment.setDelFlag(0);
         commentMapper.insert(comment);

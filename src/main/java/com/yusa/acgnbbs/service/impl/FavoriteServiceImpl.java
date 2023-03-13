@@ -5,13 +5,18 @@ import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Favorite;
 import com.yusa.acgnbbs.mapper.FavoriteMapper;
 import com.yusa.acgnbbs.service.FavoriteService;
+import com.yusa.acgnbbs.utils.SecurityUitl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     FavoriteMapper favoriteMapper;
+    @Autowired
+    SecurityUitl securityUitl;
     @Override
     public ResponseResult userFavorite(int userId) {
         LambdaQueryWrapper<Favorite>  lambdaQueryWrapper= new LambdaQueryWrapper<>();
@@ -22,6 +27,10 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     public ResponseResult addFavorite(int userId, int postId) {
+        int loginId = securityUitl.getUserId();
+        if(userId!=loginId){
+            return new ResponseResult(403,"登录状态异常",null);
+        }
         Favorite favorite=new Favorite();
         favorite.setUserId(userId);
         favorite.setPostId(postId);
@@ -30,7 +39,14 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public ResponseResult deleteFavorite(int userId) {
-        return null;
+    public ResponseResult deleteFavorite(int userId,int postIds) {
+        int loginId = securityUitl.getUserId();
+        if(userId!=loginId){
+            return new ResponseResult(403,"登录状态异常",null);
+        }
+        LambdaQueryWrapper<Favorite> lambdaQueryWrapper =new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Favorite::getUserId,userId);
+        favoriteMapper.delete(lambdaQueryWrapper);
+        return new ResponseResult(200,"OK",null);
     }
 }

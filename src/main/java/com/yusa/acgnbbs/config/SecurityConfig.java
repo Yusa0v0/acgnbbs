@@ -62,7 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/sendEmail/{toEmail}").permitAll()
                 .antMatchers("/user/register").permitAll()
                 .antMatchers("/user/userInfo").permitAll()
-
+                .antMatchers("/favorite/**/").authenticated()
 
 //                .antMatchers("/user/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证

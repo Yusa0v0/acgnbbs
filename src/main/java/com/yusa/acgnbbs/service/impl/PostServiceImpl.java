@@ -12,9 +12,11 @@ import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.CommentMapper;
 import com.yusa.acgnbbs.mapper.PostMapper;
 import com.yusa.acgnbbs.mapper.UserMapper;
+import com.yusa.acgnbbs.service.FavoriteService;
 import com.yusa.acgnbbs.service.PostService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
+import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.PostDetailsVO;
 import com.yusa.acgnbbs.vo.PostSubmitVO;
 import com.yusa.acgnbbs.vo.PostSummaryVO;
@@ -40,6 +42,10 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     UserMapper userMapper;
     @Autowired
     CommentMapper commentMapper;
+    @Autowired
+    FavoriteService favoriteService;
+    @Autowired
+    SecurityUitl securityUitl;
     @Override
     public ResponseResult hotPostList() {
         return null;
@@ -115,12 +121,23 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         post.setViewTimes(post.getViewTimes()+1);
         postMapper.updateById(post);
         PostDetailsVO postDetailsVO=BeanCopyUtils.copyBean(post, PostDetailsVO.class);
-
+        // 查询评论数
         LambdaQueryWrapper<Comment> lambdaQueryWrapper1 = new LambdaQueryWrapper();
         lambdaQueryWrapper1.eq(Comment::getPostId,id);
         List<Comment> comments = commentMapper.selectList(lambdaQueryWrapper1);
         int commentNum = comments.size();
         postDetailsVO.setCommentNum(commentNum);
+        // 查询是否收藏
+        int userId = securityUitl.getUserId();
+        boolean b=false;
+        System.out.println(userId);
+        if(userId==0){
+            b=false;
+        }
+        else {
+            b = favoriteService.checkFavorite(userId, id);
+        }
+        postDetailsVO.setFavorited(b);
         return ResponseResult.okResult(postDetailsVO);
     }
 

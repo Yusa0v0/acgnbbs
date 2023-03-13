@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class FavoriteServiceImpl implements FavoriteService {
@@ -17,12 +18,26 @@ public class FavoriteServiceImpl implements FavoriteService {
     FavoriteMapper favoriteMapper;
     @Autowired
     SecurityUitl securityUitl;
+
     @Override
-    public ResponseResult userFavorite(int userId) {
+    public ResponseResult userFavoriteList(int userId) {
         LambdaQueryWrapper<Favorite>  lambdaQueryWrapper= new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Favorite::getUserId,userId);
         List<Favorite> favorites = favoriteMapper.selectList(lambdaQueryWrapper);
         return new ResponseResult(200,"OK",favorites);
+    }
+
+    @Override
+    public Boolean checkFavorite(int userId, int postId) {
+        LambdaQueryWrapper<Favorite> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.eq(Favorite::getUserId,userId);
+        lambdaQueryWrapper.eq(Favorite::getPostId,postId);
+        Favorite favorite = favoriteMapper.selectOne(lambdaQueryWrapper);
+        Boolean isFavorited=true;
+        if(Objects.isNull(favorite)){
+            isFavorited=false;
+        }
+        return isFavorited;
     }
 
     @Override

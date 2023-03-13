@@ -12,7 +12,7 @@ public class PostDetailsVO {
     private Date createdAt;
     private Date updateAt;
     private Integer commentNum;
-
+    private Boolean isFavorited;
     public Integer getId() {
         return id;
     }
@@ -83,6 +83,18 @@ public class PostDetailsVO {
 
     public void setCommentNum(Integer commentNum) {
         this.commentNum = commentNum;
+    }
+
+    public boolean isFavorited() {
+        return isFavorited;
+    }
+
+    public Boolean getFavorited() {
+        return isFavorited;
+    }
+
+    public void setFavorited(Boolean favorited) {
+        isFavorited = favorited;
     }
 
     @Override

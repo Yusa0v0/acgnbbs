@@ -17,8 +17,10 @@ public class SecurityUitl {
     UserMapper userMapper;
     public int getUserId(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(Objects.isNull(principal)){
-                throw new RuntimeException("未获取到用户信息");
+        String s = principal.toString();
+        System.out.println(s);
+        if(s.equals("anonymousUser")){
+            return 0;
         }
         LoginUser loginuser = (LoginUser)principal;
         String username = loginuser.getUsername();
@@ -31,15 +33,17 @@ public class SecurityUitl {
         }else if (checkEmail){
             lambdaQueryWrapper.eq(User::getEmail, username);
         }else {
-            return -1;
+            return 0;
         }
         User user = userMapper.selectOne(lambdaQueryWrapper);
         return user.getId();
     }
     public User getUser(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if(Objects.isNull(principal)){
-            throw new RuntimeException("未获取到用户信息");
+        String s = principal.toString();
+//        System.out.println(s);
+        if(s.equals("anonymousUser")){
+            return null;
         }
         LoginUser loginuser = (LoginUser) principal;
         String username = loginuser.getUsername();

@@ -1,5 +1,7 @@
 package com.yusa.acgnbbs.vo;
 
+import org.springframework.security.core.parameters.P;
+
 import java.util.Date;
 
 public class PostDetailsVO {
@@ -7,12 +9,16 @@ public class PostDetailsVO {
     private String title;
     private Integer viewTimes;
     private Integer authorId;
+    private String authorName;
     private Integer categoryId;
     private String content;
     private Date createdAt;
     private Date updateAt;
     private Integer commentNum;
+    private Integer likeNum;
+    private Integer favoriteNum;
     private Boolean isFavorited;
+    private Boolean isLiked;
     public Integer getId() {
         return id;
     }
@@ -85,9 +91,6 @@ public class PostDetailsVO {
         this.commentNum = commentNum;
     }
 
-    public boolean isFavorited() {
-        return isFavorited;
-    }
 
     public Boolean getFavorited() {
         return isFavorited;
@@ -95,6 +98,38 @@ public class PostDetailsVO {
 
     public void setFavorited(Boolean favorited) {
         isFavorited = favorited;
+    }
+
+    public Boolean getLiked() {
+        return isLiked;
+    }
+
+    public void setLiked(Boolean liked) {
+        isLiked = liked;
+    }
+
+    public Integer getLikeNum() {
+        return likeNum;
+    }
+
+    public void setLikeNum(Integer likeNum) {
+        this.likeNum = likeNum;
+    }
+
+    public Integer getFavoriteNum() {
+        return favoriteNum;
+    }
+
+    public void setFavoriteNum(Integer favoriteNum) {
+        this.favoriteNum = favoriteNum;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
     }
 
     @Override

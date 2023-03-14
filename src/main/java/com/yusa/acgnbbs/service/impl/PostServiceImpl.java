@@ -6,23 +6,18 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.PageHelper;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
-import com.yusa.acgnbbs.domain.entity.Comment;
-import com.yusa.acgnbbs.domain.entity.Post;
-import com.yusa.acgnbbs.domain.entity.User;
-import com.yusa.acgnbbs.mapper.CommentMapper;
-import com.yusa.acgnbbs.mapper.PostMapper;
-import com.yusa.acgnbbs.mapper.UserMapper;
+import com.yusa.acgnbbs.domain.entity.*;
+import com.yusa.acgnbbs.mapper.*;
 import com.yusa.acgnbbs.service.FavoriteService;
+import com.yusa.acgnbbs.service.LikeService;
 import com.yusa.acgnbbs.service.PostService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.PostDetailsVO;
-import com.yusa.acgnbbs.vo.PostSubmitVO;
 import com.yusa.acgnbbs.vo.PostSummaryVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
@@ -43,7 +38,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     @Autowired
     CommentMapper commentMapper;
     @Autowired
+    FavoriteMapper favoriteMapper;
+    @Autowired
+    LikesMapper likesMapper;
+    @Autowired
     FavoriteService favoriteService;
+    @Autowired
+    LikeService likeService;
     @Autowired
     SecurityUitl securityUitl;
     @Override
@@ -118,26 +119,47 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getId,id);
         Post post = postMapper.selectOne(lambdaQueryWrapper);
+        // 增加阅读次数
         post.setViewTimes(post.getViewTimes()+1);
         postMapper.updateById(post);
         PostDetailsVO postDetailsVO=BeanCopyUtils.copyBean(post, PostDetailsVO.class);
+        // 查询作者名字
+        LambdaQueryWrapper<User> lambdaQueryWrapper4 = new LambdaQueryWrapper();
+        lambdaQueryWrapper4.eq(User::getId,post.getAuthorId());
+        User user = userMapper.selectOne(lambdaQueryWrapper4);
+        postDetailsVO.setAuthorName(user.getUsername());
         // 查询评论数
         LambdaQueryWrapper<Comment> lambdaQueryWrapper1 = new LambdaQueryWrapper();
         lambdaQueryWrapper1.eq(Comment::getPostId,id);
-        List<Comment> comments = commentMapper.selectList(lambdaQueryWrapper1);
-        int commentNum = comments.size();
+        int commentNum = commentMapper.selectCount(lambdaQueryWrapper1);
         postDetailsVO.setCommentNum(commentNum);
+        // 查收藏数
+        LambdaQueryWrapper<Favorite> lambdaQueryWrapper2 = new LambdaQueryWrapper();
+        lambdaQueryWrapper2.eq(Favorite::getPostId,id);
+        Integer favoriteNum = favoriteMapper.selectCount(lambdaQueryWrapper2);
+        postDetailsVO.setFavoriteNum(favoriteNum);
+        // 查喜欢数
+        LambdaQueryWrapper<Likes> lambdaQueryWrapper3 = new LambdaQueryWrapper();
+        lambdaQueryWrapper3.eq(Likes::getPostId,id);
+        Integer likeNum = likesMapper.selectCount(lambdaQueryWrapper3);
+        postDetailsVO.setLikeNum(likeNum);
         // 查询是否收藏
         int userId = securityUitl.getUserId();
-        boolean b=false;
+        boolean favorited=false;
+        // 查询是否喜欢
+        boolean liked=false;
         System.out.println(userId);
         if(userId==0){
-            b=false;
+            favorited=false;
+            liked=false;
         }
         else {
-            b = favoriteService.checkFavorite(userId, id);
+            favorited = favoriteService.checkFavorite(userId, id);
+            liked =likeService.checkLiked(userId,id);
         }
-        postDetailsVO.setFavorited(b);
+        postDetailsVO.setFavorited(favorited);
+        postDetailsVO.setLiked(liked);
+
         return ResponseResult.okResult(postDetailsVO);
     }
 

@@ -61,4 +61,8 @@ public class SecurityUitl {
         User user = userMapper.selectOne(lambdaQueryWrapper);
         return user;
     }
+    public Boolean checkUserId(int userId){
+        int serverId = getUserId();
+        return (serverId==userId);
+    }
 }

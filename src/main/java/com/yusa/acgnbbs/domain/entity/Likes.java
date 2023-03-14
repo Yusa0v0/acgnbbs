@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
-import java.lang.reflect.Type;
 import java.util.Date;
 import java.io.Serializable;
 
@@ -12,15 +11,13 @@ import java.io.Serializable;
  * (Like)实体类
  *
  * @author makejava
- * @since 2023-03-11 21:00:52
+ * @since 2023-03-13 18:27:39
  */
-@TableName("like")
-public class Like implements Serializable {
+@TableName("likes")
+public class Likes implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    
     private Integer userId;
-    
     private Integer postId;
     
     private Date createdAt;
@@ -68,7 +65,15 @@ public class Like implements Serializable {
         this.delFlag = delFlag;
     }
 
-    public Like() {
+    public Likes() {
+    }
+
+    public Likes(Integer id, Integer userId, Integer postId, Date createdAt, Integer delFlag) {
+        this.id = id;
+        this.userId = userId;
+        this.postId = postId;
+        this.createdAt = createdAt;
+        this.delFlag = delFlag;
     }
 
     @Override

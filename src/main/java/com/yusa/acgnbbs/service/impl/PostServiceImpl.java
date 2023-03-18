@@ -3,7 +3,9 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.*;
@@ -15,7 +17,8 @@ import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.PostDetailsVO;
-import com.yusa.acgnbbs.vo.PostSummaryVO;
+import com.yusa.acgnbbs.vo.PostListTotalVO;
+import com.yusa.acgnbbs.vo.PostListVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,44 +68,102 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult animationPostList(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_ANIMATION);
         List<Post> posts = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("总页数"+total);
         // 转换成VO
-        List<PostSummaryVO> postSummaryVOList =BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class);
-        System.out.println(postSummaryVOList);
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
+        List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
+        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
+
+        for (PostListVO postListVO :
+                postListVOList) {
+            User user = userMapper.selectById(postListVO.getAuthorId());
+            String username = user.getUsername();
+            String avatar = user.getAvatar();
+            postListVO.setAvatar(avatar);
+            postListVO.setAuthorName(username);
+        }
+        PostListTotalVO postListTotalVO = new PostListTotalVO(postListVOList, total);
+        return ResponseResult.okResult(postListTotalVO);
     }
 
     @Override
     public ResponseResult comicPostList(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_COMIC);
         List<Post> posts = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("总页数"+total);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
+        List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
+        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
+
+        for (PostListVO postListVO :
+                postListVOList) {
+            User user = userMapper.selectById(postListVO.getAuthorId());
+            String username = user.getUsername();
+            String avatar = user.getAvatar();
+            postListVO.setAvatar(avatar);
+            postListVO.setAuthorName(username);
+        }
+        PostListTotalVO postListTotalVO = new PostListTotalVO(postListVOList, total);
+        return ResponseResult.okResult(postListTotalVO);
     }
 
     @Override
     public ResponseResult gamePostList(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_GAME);
         List<Post> posts = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("总页数"+total);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
+        List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
+        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
+
+        for (PostListVO postListVO :
+                postListVOList) {
+            User user = userMapper.selectById(postListVO.getAuthorId());
+            String username = user.getUsername();
+            String avatar = user.getAvatar();
+            postListVO.setAvatar(avatar);
+            postListVO.setAuthorName(username);
+        }
+        PostListTotalVO postListTotalVO = new PostListTotalVO(postListVOList,total);
+        return ResponseResult.okResult(postListTotalVO);
     }
 
     @Override
     public ResponseResult novelPostList(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_NOVEL);
         List<Post> posts = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("总页数"+total);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
+        List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
+        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
+
+        for (PostListVO postListVO :
+                postListVOList) {
+            User user = userMapper.selectById(postListVO.getAuthorId());
+            String username = user.getUsername();
+            String avatar = user.getAvatar();
+            postListVO.setAvatar(avatar);
+            postListVO.setAuthorName(username);
+        }
+        PostListTotalVO postListTotalVO = new PostListTotalVO(postListVOList, total);
+        return ResponseResult.okResult(postListTotalVO);
     }
 
     @Override
@@ -112,7 +173,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         lambdaQueryWrapper.eq(Post::getAuthorId, userId);
         List<Post> posts = list(lambdaQueryWrapper);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostSummaryVO.class));
+        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostListVO.class));
     }
     @Override
     public ResponseResult postDetails(int id) {

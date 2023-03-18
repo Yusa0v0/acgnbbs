@@ -2,19 +2,16 @@ package com.yusa.acgnbbs.vo;
 
 import java.util.Date;
 
-public class PostSummaryVO {
-
-
+public class PostListVO {
     private Integer id;
     private String title;
+    private String avatar;
     private Integer viewTimes;
-
     private Integer authorId;
-
+    private String authorName;
     private Date createdAt;
 
     private Date updateAt;
-
     private String summary;
     public Integer getId() {
         return id;
@@ -73,6 +70,24 @@ public class PostSummaryVO {
     public void setSummary(String summary) {
         this.summary = summary;
     }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+
 
     @Override
     public String toString() {

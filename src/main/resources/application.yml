@@ -16,6 +16,9 @@ spring:
     multipart:
       max-file-size: 2MB
       max-request-size: 5MB
+    profiles:
+      #    active: release
+      active: dev
   mail:
     host: smtp.163.com
     port: 25
@@ -27,14 +30,6 @@ spring:
         debug: true #启动debug调试
         smtp:
           auth: true
-#          socketFactory:
-#            class: javax.net.ssl.SSLSocketFactory #SSL连接配置
-#          ssl:
-#            trust: smtp.163.com
-#            enable: true
-#          starttls:
-#            enable: true
-#            required: true
 #mybatis-plus:
 #  configuration:
 #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
@@ -55,3 +50,13 @@ pagehelper:
   reasonable: true
   supportMethodsArguments: true
 
+
+#阿里云 OSS（配置bucket信息）
+
+aliyun:
+  oss:
+    file:
+      endpoint: oss-cn-hangzhou.aliyuncs.com
+      keyid: LTAI5tAk8D2qzbdS3eReCeSh
+      keysecret: rnja1HlrSWoq8NeyQAAY8i58dwEphk
+      bucketname: ruabit-acgnbbs

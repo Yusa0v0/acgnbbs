@@ -226,42 +226,17 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult addPost(Post post) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        LoginUser loginUser = (LoginUser)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username = loginUser.getUsername();
-        System.out.println(username);
-        boolean checkPhone = RegexValidateUtil.checkPhone(username);
-        boolean checkEmail = RegexValidateUtil.checkEmail(username);
-        LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
-
-        if(checkPhone){
-            lambdaQueryWrapper.eq(User::getPhone, username);
-        }
-        else if (checkEmail){
-            lambdaQueryWrapper.eq(User::getEmail, username);
-        }
-        else {
-            return new ResponseResult(200,"发布失败，请重试",null);
-//            throw new RuntimeException("not phone or email");
-        }
-        //查询User信息
-        User user = userMapper.selectOne(lambdaQueryWrapper);
         System.out.println(post);
+        User user = securityUitl.getUser();
         post.setViewTimes(0);
         post.setAuthorId(user.getId());
-        //
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        System.out.println(dateFormat.format(calendar.getTime()));
+        post.setTitle(post.getTitle());
         Date date = new Date();
         post.setCreatedAt(date);
         post.setUpdateAt(date);
         post.setDelFlag(0);
-
-
 //        post.setId(9);
         int insert = postMapper.insert(post);
-
         return  new ResponseResult(200,"发布成功！",null);
     }
 

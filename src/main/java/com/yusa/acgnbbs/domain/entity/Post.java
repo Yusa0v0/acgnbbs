@@ -28,7 +28,7 @@ public class Post implements Serializable {
     private Integer categoryId;
     
     private String content;
-    
+    private String cover;
     private Date createdAt;
     
     private Date updateAt;
@@ -118,5 +118,29 @@ public class Post implements Serializable {
         this.delFlag = delFlag;
     }
 
+    public String getCover() {
+        return cover;
+    }
+
+    public void setCover(String cover) {
+        this.cover = cover;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", viewTimes=" + viewTimes +
+                ", authorId=" + authorId +
+                ", categoryId=" + categoryId +
+                ", content='" + content + '\'' +
+                ", cover='" + cover + '\'' +
+                ", createdAt=" + createdAt +
+                ", updateAt=" + updateAt +
+                ", summary='" + summary + '\'' +
+                ", delFlag=" + delFlag +
+                '}';
+    }
 }
 

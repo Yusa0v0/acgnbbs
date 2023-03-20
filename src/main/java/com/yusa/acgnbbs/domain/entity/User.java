@@ -16,7 +16,6 @@ import java.io.Serializable;
 public class User implements Serializable {
     @TableId(type = IdType.AUTO)
     private Integer id;
-    
     private String username;
     
     private Integer gender;

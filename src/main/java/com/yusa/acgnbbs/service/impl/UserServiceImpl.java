@@ -5,7 +5,9 @@ import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.UserService;
+import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.SecurityUitl;
+import com.yusa.acgnbbs.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -37,7 +39,8 @@ public class UserServiceImpl implements UserService {
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(User::getId,id);
         User user = userMapper.selectOne(lambdaQueryWrapper);
-        return new ResponseResult(200,"OK",user);
+        UserInfoVO userInfoVO = BeanCopyUtils.copyBean(user,UserInfoVO.class);
+        return new ResponseResult(200,"OK",userInfoVO);
     }
     public String getUserAvatar(int id){
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();

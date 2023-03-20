@@ -41,9 +41,9 @@ public class PostController {
         return postService.novelPostList(pageNum,POST_PAGE_SIZE);
     }
 
-    @GetMapping("/userPostList/{userId}/{pageNum}")
-    public ResponseResult userPostList(@PathVariable("userId") int userId,@PathVariable("pageNum") int pageNum){
-        return postService.userPostList(pageNum,POST_PAGE_SIZE,userId);
+    @GetMapping("/userPostList/{userId}/{currentPage}/{pageSize}")
+    public ResponseResult userPostList(@PathVariable("userId") int userId,@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize){
+        return postService.userPostList(currentPage,pageSize,userId);
     }
 
     @GetMapping("/postDetails/{id}")

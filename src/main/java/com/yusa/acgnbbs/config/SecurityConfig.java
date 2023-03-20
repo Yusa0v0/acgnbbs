@@ -68,12 +68,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/follow/addFollow/").authenticated()
                 .antMatchers("/follow/cancelFollow/").authenticated()
                 .antMatchers("/eduoss/fileoss/").permitAll()
+                .antMatchers("/favorite/userFavoriteList/{userId}/{currentPage}/{pageSize}").permitAll()
+
                 .antMatchers("/swagger-ui.html").permitAll()
 
 
 //                .antMatchers("/user/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().permitAll();
+                .anyRequest().anonymous();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 //        决定一下保留
 //        http.addFilterBefore(jwtAuthenticationFilter, LogoutFilter.class);

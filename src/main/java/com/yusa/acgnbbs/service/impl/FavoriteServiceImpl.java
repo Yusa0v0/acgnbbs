@@ -1,14 +1,24 @@
 package com.yusa.acgnbbs.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Favorite;
+import com.yusa.acgnbbs.domain.entity.Post;
 import com.yusa.acgnbbs.mapper.FavoriteMapper;
+import com.yusa.acgnbbs.mapper.PostMapper;
+import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.FavoriteService;
+import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.SecurityUitl;
+import com.yusa.acgnbbs.vo.FavoritePostTotalVO;
+import com.yusa.acgnbbs.vo.FavoritePostVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -17,14 +27,31 @@ public class FavoriteServiceImpl implements FavoriteService {
     @Autowired
     FavoriteMapper favoriteMapper;
     @Autowired
+    PostMapper postMapper;
+    @Autowired
+    UserMapper userMapper;
+    @Autowired
     SecurityUitl securityUitl;
 
     @Override
-    public ResponseResult userFavoriteList(int userId) {
+    public ResponseResult userFavoriteList(int currentPage,int pageSize,int userId) {
+        Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Favorite>  lambdaQueryWrapper= new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Favorite::getUserId,userId);
         List<Favorite> favorites = favoriteMapper.selectList(lambdaQueryWrapper);
-        return new ResponseResult(200,"OK",favorites);
+        List<Post> postList= new ArrayList<>();
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("total:"+total);
+        for (Favorite favorite: favorites) {
+            postList.add(postMapper.selectById(favorite.getPostId()));
+        }
+        List<FavoritePostVO> favoritePostVOS = BeanCopyUtils.copyBeanList(postList, FavoritePostVO.class);
+        for (FavoritePostVO favorite: favoritePostVOS) {
+            favorite.setAuthorName(userMapper.selectById(favorite.getAuthorId()).getUsername());
+        }
+        FavoritePostTotalVO favoritePostTotalVO = new FavoritePostTotalVO(favoritePostVOS,total);
+        return new ResponseResult(200,"OK",favoritePostTotalVO);
     }
 
     @Override

@@ -6,7 +6,6 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.*;
 import com.yusa.acgnbbs.mapper.*;
@@ -14,18 +13,11 @@ import com.yusa.acgnbbs.service.FavoriteService;
 import com.yusa.acgnbbs.service.LikeService;
 import com.yusa.acgnbbs.service.PostService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
-import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
-import com.yusa.acgnbbs.vo.PostDetailsVO;
-import com.yusa.acgnbbs.vo.PostListTotalVO;
-import com.yusa.acgnbbs.vo.PostListVO;
+import com.yusa.acgnbbs.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -74,7 +66,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
-        System.out.println("总页数"+total);
+        System.out.println("总条数"+total);
         // 转换成VO
         List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
         LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
@@ -168,12 +160,20 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
 
     @Override
     public ResponseResult userPostList(int pageNum, int pageSize, int userId) {
-        PageHelper.startPage(pageNum, pageSize);
+        Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Post::getAuthorId, userId);
         List<Post> posts = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        List<UserPostVO> userPostVOList = BeanCopyUtils.copyBeanList(posts, UserPostVO.class);
+        for (UserPostVO userPostVO: userPostVOList) {
+            userPostVO.setAuthorName(userMapper.selectById(userPostVO.getAuthorId()).getUsername());
+        }
+        UserPostTotalVO userPostTotalVO = new UserPostTotalVO(userPostVOList, total);
+
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(posts, PostListVO.class));
+        return ResponseResult.okResult(userPostTotalVO);
     }
     @Override
     public ResponseResult postDetails(int id) {

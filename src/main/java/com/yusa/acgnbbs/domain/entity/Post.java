@@ -126,6 +126,9 @@ public class Post implements Serializable {
         this.cover = cover;
     }
 
+    public Post() {
+    }
+
     @Override
     public String toString() {
         return "Post{" +

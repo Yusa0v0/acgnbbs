@@ -3,11 +3,13 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Comment;
 import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.CommentMapper;
+import com.yusa.acgnbbs.mapper.PostMapper;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.CommentService;
 import com.yusa.acgnbbs.service.UserService;
@@ -15,6 +17,8 @@ import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.CommentVO;
+import com.yusa.acgnbbs.vo.UserCommentTotalVO;
+import com.yusa.acgnbbs.vo.UserCommentVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -27,6 +31,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     CommentMapper commentMapper;
     @Autowired
     UserMapper userMapper;
+    @Autowired
+    PostMapper postMapper;
     @Autowired
     UserServiceImpl userService;
     @Autowired
@@ -54,12 +60,21 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
 
     @Override
     public ResponseResult userComment(int currentPage, int pageSize,int userId) {
-        PageHelper.startPage(currentPage, pageSize);
+        Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Comment::getUserId, userId);
         List<Comment> comments = list(lambdaQueryWrapper);
+        PageInfo info = new PageInfo<>(page.getResult());
+        Long total = info.getTotal();//获取总条数
+        System.out.println("total:"+total);
         // 转换成VO
-        return ResponseResult.okResult(BeanCopyUtils.copyBeanList(comments, CommentVO.class));
+        List<UserCommentVO> commentVOList = BeanCopyUtils.copyBeanList(comments, UserCommentVO.class);
+        System.out.println(commentVOList);
+        for (UserCommentVO userCommentVO : commentVOList) {
+            userCommentVO.setPostTitle(postMapper.selectById(userCommentVO.getPostId()).getTitle());
+        }
+        UserCommentTotalVO userCommentTotalVO = new UserCommentTotalVO(commentVOList, total);
+        return ResponseResult.okResult(userCommentTotalVO);
     }
 
     @Override

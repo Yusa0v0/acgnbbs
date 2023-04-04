@@ -55,7 +55,10 @@ public class PostController {
     public ResponseResult addPost(@RequestBody Post post){
         return postService.addPost(post);
     }
-
+    @GetMapping("/getWritePost/{postId}")
+    public ResponseResult getWritePost(@PathVariable("postId") int postId){
+        return postService.getWritePost(postId);
+    }
     @PostMapping("/deletePost")
     @PreAuthorize("hasAuthority('aAdmin')")
     public ResponseResult deletePost(){

@@ -228,16 +228,36 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult addPost(Post post) {
         System.out.println(post);
         User user = securityUitl.getUser();
-        post.setViewTimes(0);
-        post.setAuthorId(user.getId());
-        post.setTitle(post.getTitle());
-        Date date = new Date();
-        post.setCreatedAt(date);
-        post.setUpdateAt(date);
-        post.setDelFlag(0);
+        // 如果postId为0，则为新增
+        if(post.getId()==0) {
+            post.setViewTimes(0);
+            post.setAuthorId(user.getId());
+            post.setTitle(post.getTitle());
+            Date date = new Date();
+            post.setCreatedAt(date);
+            post.setUpdateAt(date);
+            post.setDelFlag(0);
 //        post.setId(9);
-        int insert = postMapper.insert(post);
+            int insert = postMapper.insert(post);
+        }
+        // 否则为更新
+        else {
+            // 原来的
+            Post post1 = postMapper.selectById(post.getId());
+            post.setCreatedAt(post1.getCreatedAt());
+            post.setUpdateAt(new Date());
+            postMapper.updateById(post);
+        }
         return  new ResponseResult(200,"发布成功！",null);
+    }
+
+    @Override
+    public ResponseResult getWritePost(int postId) {
+        Post post = postMapper.selectById(postId);
+        System.out.println(post);
+        WritePostVO writePostVO = BeanCopyUtils.copyBean(post, WritePostVO.class);
+        System.out.println(writePostVO);
+        return new ResponseResult(200,"OK",writePostVO);
     }
 
     @Override

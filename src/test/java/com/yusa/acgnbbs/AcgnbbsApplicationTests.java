@@ -34,10 +34,13 @@ class AcgnbbsApplicationTests {
 //        System.out.println(authentication);
 //        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        System.out.println(principal);
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
-        System.out.println(dateFormat.format(calendar.getTime()));
+//        Calendar calendar = Calendar.getInstance();
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+//        System.out.println(dateFormat.format(calendar.getTime()));
         Date date = new Date();
+        System.out.println(date.getYear());
+        System.out.println(date.getMonth());
+        System.out.println(date.getDay());
         System.out.println(date);
     }
 

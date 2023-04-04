@@ -33,5 +33,6 @@ public interface PostService extends IService<Post> {
 //    ResponseResult animationPostList(Integer pageNum, Integer pageSize, Long categoryId);
     ResponseResult addPost(Post post);
 
+    ResponseResult getWritePost(int postId);
     ResponseResult deletePost(int postId);
 }

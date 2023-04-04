@@ -70,6 +70,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/eduoss/fileoss/").permitAll()
                 .antMatchers("/favorite/userFavoriteList/{userId}/{currentPage}/{pageSize}").permitAll()
 
+                .antMatchers("/pageViews/**/").permitAll()
+
                 .antMatchers("/swagger-ui.html").permitAll()
 
 

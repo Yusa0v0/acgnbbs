@@ -1,16 +1,19 @@
 package com.yusa.acgnbbs;
 
+import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.RedisCache;
+import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
+import com.yusa.acgnbbs.vo.UserInfoVO;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.RedisConnection;
-import org.springframework.data.redis.core.RedisCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.data.redis.core.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,11 +21,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
+import static com.yusa.acgnbbs.constants.SystemConstants.USER_SCORE_SET;
 import static com.yusa.acgnbbs.constants.SystemConstants.USER_SIGN_KEY;
 
 @SpringBootTest
@@ -31,6 +32,12 @@ class AcgnbbsApplicationTests {
     SecurityUitl securityUitl;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Autowired
+    UserService userService;
+    @Autowired
+    RedisZSetRankUtil redisZSetRankUtil;
 
     @Test
     void contextLoads() {
@@ -115,6 +122,12 @@ class AcgnbbsApplicationTests {
         //1.3.5.7.8.10.12
 
 
+    }
+    @Test
+    // 批量新增
+    public void batchAdd() {
+        redisZSetRankUtil.init(USER_SCORE_SET,11);
+        redisZSetRankUtil.getUserScore();
     }
 
 }

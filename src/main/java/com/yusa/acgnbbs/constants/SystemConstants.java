@@ -32,4 +32,11 @@ public class SystemConstants {
 
 
     public static final String USER_SIGN_KEY="sign:";
+
+    public static final String USER_SCORE_SET="userScoreSet";
+    public static final String USER_SIGN_NUM_SET="userSignNumSet";
+    public static final String USER_FAN_NUM_SET="userFanNumSet";
+    public static final String USER_PAGE_VIEW_SET="userPageViewSet";
+
+
 }

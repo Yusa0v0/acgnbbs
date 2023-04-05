@@ -2,6 +2,17 @@ package com.yusa.acgnbbs.vo;
 
 public class UserInfoVO
 {
+    public UserInfoVO() {
+    }
+
+    public UserInfoVO(Integer id, String username, Integer gender, String bio, String avatar) {
+        this.id = id;
+        this.username = username;
+        this.gender = gender;
+        this.bio = bio;
+        this.avatar = avatar;
+    }
+
     private Integer id;
     private String username;
 
@@ -49,5 +60,16 @@ public class UserInfoVO
 
     public void setAvatar(String avatar) {
         this.avatar = avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "UserInfoVO{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", gender=" + gender +
+                ", bio='" + bio + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

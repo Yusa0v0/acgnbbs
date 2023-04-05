@@ -6,6 +6,7 @@ import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
+import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.connection.BitFieldSubCommands;
 import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.RedisCallback;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
+import static com.yusa.acgnbbs.constants.SystemConstants.USER_SCORE_SET;
 import static com.yusa.acgnbbs.constants.SystemConstants.USER_SIGN_KEY;
 
 @Service
@@ -35,6 +38,10 @@ public class UserServiceImpl implements UserService {
     SecurityUitl securityUitl;
     @Autowired
     StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    RedisTemplate redisTemplate;
+    @Autowired
+    RedisZSetRankUtil redisZSetRankUtil;
     @Override
     public ResponseResult setUserInfo(User user) {
         // 获取前端传的id
@@ -84,6 +91,8 @@ public class UserServiceImpl implements UserService {
         int dayOfMonth = now.getDayOfMonth();
         //5：存入redis   setbit key offset 1
         stringRedisTemplate.opsForValue().setBit(key, dayOfMonth - 1, true);
+        redisZSetRankUtil.init(USER_SIGN_KEY,userId);
+        redisZSetRankUtil.incrementScore(20);
         return ResponseResult.okResult();
     }
 
@@ -215,6 +224,8 @@ public class UserServiceImpl implements UserService {
         }
         return ResponseResult.okResult(count);
     }
+
+
 
     @Override
     public String getUsername(int id) {

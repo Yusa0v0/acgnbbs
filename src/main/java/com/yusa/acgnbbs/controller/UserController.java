@@ -39,6 +39,11 @@ public class UserController {
     public ResponseResult userSign(){
         return userService.sign();
     }
+    @GetMapping("/user/getSigned/{id}")
+    public ResponseResult getSigned(@PathVariable int id){
+        return userService.getSigned(id);
+    }
+
     @GetMapping("/user/signCount/{userId}")
     public ResponseResult signCount(@PathVariable int userId) {
         return userService.signCount(userId);

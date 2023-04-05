@@ -87,6 +87,40 @@ public class UserServiceImpl implements UserService {
         return ResponseResult.okResult();
     }
 
+    @Override
+    public ResponseResult getSigned(int userId) {
+        LocalDateTime now = LocalDateTime.now();
+        //2.1获取当前日期中的  年和月
+        String keySuffix = now.format(DateTimeFormatter.ofPattern(":yyyyMM"));
+        //3：拼接key  (当前用户id + 年月)
+        String key = USER_SIGN_KEY + userId + keySuffix;
+        System.out.println(key);
+        //4：获取今天是当月的第几天
+        int dayOfMonth = now.getDayOfMonth();
+        List<Long> result = stringRedisTemplate.opsForValue().bitField(
+                key,
+                BitFieldSubCommands.create()
+                        .get(BitFieldSubCommands.BitFieldType.unsigned(dayOfMonth)).valueAt(0)
+        );
+        System.out.println(result);
+        if (result == null || result.isEmpty()) {
+            // 没有任何签到结果
+            return ResponseResult.okResult(false);
+        }
+        Long num = result.get(0);
+        if (num == null || num == 0) {
+            return ResponseResult.okResult(false);
+        }
+        // 6.循环遍历
+        int count = 0;
+        // 6.1.让这个数字与1做与运算，得到数字的最后一个bit位  // 判断这个bit位是否为0
+        if ((num & 1) == 0) {
+            // 如果为0，说明未签到，结束
+            return ResponseResult.okResult(false);
+        }
+        return ResponseResult.okResult(true);
+    }
+
     // 获取连续签到天数
     @Override
     public ResponseResult signCount(int userId) {

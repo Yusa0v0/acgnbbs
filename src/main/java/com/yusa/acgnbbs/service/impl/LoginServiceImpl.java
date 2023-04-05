@@ -71,7 +71,7 @@ public class LoginServiceImpl implements LoginService {
             LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
             boolean checkPhone = RegexValidateUtil.checkPhone(username);
             boolean checkEmail = RegexValidateUtil.checkEmail(username);
-            System.out.println(RegexValidateUtil.checkEmail("1060180905@qq.com"));
+            System.out.println(checkPhone+"checkPhone");
             if(checkPhone) {
                 lambdaQueryWrapper.eq(User::getPhone, username);
             }
@@ -82,7 +82,7 @@ public class LoginServiceImpl implements LoginService {
                 return new  ResponseResult(200,"登录失败",null);
             }
             User user1 = userMapper.selectOne(lambdaQueryWrapper);
-
+            System.out.println("user1:"+user1);
             // TODO
             List<String> list =new ArrayList<>(Arrays.asList("aAdmin","cAdmin","gAdmin","nAdmin"));
             LoginUser loginUser= new LoginUser(user1,list,false);

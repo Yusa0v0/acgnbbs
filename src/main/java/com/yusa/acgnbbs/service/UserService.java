@@ -8,11 +8,7 @@ public interface UserService {
      ResponseResult getUserInfo(int id);
      String getUserAvatar(int id);
      String getUsername(int id);
-     ResponseResult sign();
-     ResponseResult getSigned(int userId);
-     ResponseResult signCount(int userId);
-     ResponseResult signMonthCount(int userId,String date);
-     ResponseResult signYearCount(int userId,int year);
+
 
 
 

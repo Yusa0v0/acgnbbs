@@ -62,11 +62,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/sendEmail/{toEmail}").permitAll()
                 .antMatchers("/user/register").permitAll()
                 .antMatchers("/user/userInfo").permitAll()
-                .antMatchers("/user/sign").permitAll()
-                .antMatchers("/user/getSigned/{id}").permitAll()
-                .antMatchers("/user/signCount/{userId}").permitAll()
-                .antMatchers("/user/signMonthCount/{userId}/{date}").permitAll()
-                .antMatchers("/user/signYearCount/{userId}/{year}").permitAll()
+
                 .antMatchers("/favorite/**/").authenticated()
                 .antMatchers("/like/**/").authenticated()
                 .antMatchers("/follow/**/").permitAll()
@@ -75,6 +71,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/eduoss/fileoss/").permitAll()
                 .antMatchers("/favorite/userFavoriteList/{userId}/{currentPage}/{pageSize}").permitAll()
 
+                .antMatchers("/rank/**/").permitAll()
+
+                .antMatchers("/sign/**/").permitAll()
 
                 .antMatchers("/pageViews/**/").permitAll()
 

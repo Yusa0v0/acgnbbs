@@ -2,6 +2,7 @@ package com.yusa.acgnbbs;
 
 import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.service.ScoreService;
 import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.RedisCache;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
@@ -23,8 +24,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import static com.yusa.acgnbbs.constants.SystemConstants.USER_SCORE_SET;
-import static com.yusa.acgnbbs.constants.SystemConstants.USER_SIGN_KEY;
+import static com.yusa.acgnbbs.constants.SystemConstants.*;
 
 @SpringBootTest
 class AcgnbbsApplicationTests {
@@ -34,6 +34,8 @@ class AcgnbbsApplicationTests {
     StringRedisTemplate stringRedisTemplate;
     @Autowired
     RedisTemplate redisTemplate;
+    @Autowired
+    ScoreService scoreService;
     @Autowired
     UserService userService;
     @Autowired
@@ -126,8 +128,38 @@ class AcgnbbsApplicationTests {
     @Test
     // 批量新增
     public void batchAdd() {
-        redisZSetRankUtil.init(USER_SCORE_SET,11);
-        redisZSetRankUtil.getUserScore();
-    }
+        redisTemplate.opsForZSet().removeRange(USER_SCORE_SET,0,11);
 
+    }
+    @Test
+    public void testZremSet() {
+        Set<ZSetOperations.TypedTuple<UserInfoVO>> tuples = new HashSet<>();
+        long start = System.currentTimeMillis();
+        for (int i = 1; i < 11; i++) {
+            DefaultTypedTuple<UserInfoVO> tuple = new DefaultTypedTuple<>( (UserInfoVO) userService.getUserInfo(i).getData(), 1D + i*10);
+            tuples.add(tuple);
+        }
+        System.out.println("循环时间:" +( System.currentTimeMillis() - start));
+        Long num = redisTemplate.opsForZSet().add(USER_SCORE_SET, tuples);
+        System.out.println("批量新增时间:" +(System.currentTimeMillis() - start));
+        System.out.println("受影响行数：" + num);
+    }
+    @Test
+    public void batchSign(){
+        for(int userId=1;userId<=10;++userId) {
+            String keySuffix = (":202304");
+            String key = USER_SIGN_KEY + userId + keySuffix;
+            //4：获取今天是当月的第几天
+            for(int dayOfMonth =1;dayOfMonth<=6;++dayOfMonth) {
+                //5：存入redis   setbit key offset 1
+                stringRedisTemplate.opsForValue().setBit(key, dayOfMonth - 1, true);
+                // add score
+                scoreService.addUserScore(userId, 20);
+                // select USER_SIGN_NUM_SET
+                redisZSetRankUtil.init(USER_SIGN_NUM_SET, userId);
+                // add one
+                redisZSetRankUtil.incrementScore(1);
+            }
+        }
+    }
 }

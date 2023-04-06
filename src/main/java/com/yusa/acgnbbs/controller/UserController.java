@@ -35,27 +35,7 @@ public class UserController {
     public ResponseResult setUserInfo(@RequestBody User user){
         return userService.setUserInfo(user);
     }
-    @GetMapping("/user/sign")
-    public ResponseResult userSign(){
-        return userService.sign();
-    }
-    @GetMapping("/user/getSigned/{id}")
-    public ResponseResult getSigned(@PathVariable int id){
-        return userService.getSigned(id);
-    }
 
-    @GetMapping("/user/signCount/{userId}")
-    public ResponseResult signCount(@PathVariable int userId) {
-        return userService.signCount(userId);
-    }
-    @GetMapping("/user/signMonthCount/{userId}/{date}")
-    public ResponseResult signMonthCount(@PathVariable("userId") int userId,@PathVariable("date") String date) {
-        return userService.signMonthCount(userId,date);
-    }
-    @GetMapping("/user/signYearCount/{userId}/{year}")
-    public ResponseResult signYearCount(@PathVariable("userId") int userId,@PathVariable("year") int year) {
-        return userService.signYearCount(userId,year);
-    }
     // username
     @GetMapping("/user/sendCaptcha/{username}")
     public ResponseResult sendCaptcha(@PathVariable String username){

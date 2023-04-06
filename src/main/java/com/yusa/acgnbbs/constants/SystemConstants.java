@@ -33,10 +33,23 @@ public class SystemConstants {
 
     public static final String USER_SIGN_KEY="sign:";
 
+    /**
+     * 签到的时候用到
+     */
     public static final String USER_SCORE_SET="userScoreSet";
+    /**
+     * 签到的时候用到
+     */
     public static final String USER_SIGN_NUM_SET="userSignNumSet";
+    /**
+     * 关注/取关的时候用到
+     */
     public static final String USER_FAN_NUM_SET="userFanNumSet";
+    /**
+     * 统计浏览量的时候用到
+     */
     public static final String USER_PAGE_VIEW_SET="userPageViewSet";
 
+    public static final int SYSTEM_START_YEAR=2019;
 
 }

@@ -7,6 +7,7 @@ import com.github.pagehelper.PageInfo;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Comment;
+import com.yusa.acgnbbs.domain.entity.Post;
 import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.CommentMapper;
 import com.yusa.acgnbbs.mapper.PostMapper;
@@ -62,7 +63,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public ResponseResult userComment(int currentPage, int pageSize,int userId) {
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Comment::getUserId, userId);
+        lambdaQueryWrapper.orderByDesc(Comment::getCreatedAt).eq(Comment::getUserId, userId);
         List<Comment> comments = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数

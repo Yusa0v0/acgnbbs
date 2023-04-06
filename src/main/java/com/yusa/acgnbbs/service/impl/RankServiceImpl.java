@@ -2,35 +2,53 @@ package com.yusa.acgnbbs.service.impl;
 
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.service.RankService;
+import com.yusa.acgnbbs.service.ScoreService;
+import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 
-import static com.yusa.acgnbbs.constants.SystemConstants.USER_SCORE_SET;
+import java.util.Set;
+
+import static com.yusa.acgnbbs.constants.SystemConstants.*;
 
 @Service
 public class RankServiceImpl implements RankService {
     @Autowired
     RedisTemplate redisTemplate;
-    @Override
-    public ResponseResult getSignNumRank() {
-//        redisTemplate.opsForZSet()
+    @Autowired
+    ScoreService scoreService;
+    @Autowired
+    RedisZSetRankUtil redisZSetRankUtil;
 
-        return null;
+
+
+    @Override
+    public ResponseResult getScoreRankList(int start,int end) {
+        redisZSetRankUtil.init(USER_SCORE_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
     }
 
     @Override
-    public ResponseResult getScoreRank() {
-        return null;
+    public ResponseResult getSignNumRankList(int start, int end) {
+        redisZSetRankUtil.init(USER_SIGN_NUM_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
     }
 
     @Override
-    public ResponseResult getFanNumRank() {
-        return null;
+    public ResponseResult getFanNumRankList(int start, int end) {
+        redisZSetRankUtil.init(USER_FAN_NUM_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
     }
 
     @Override
-    public ResponseResult getPageViewRank() {
-        return null;
+    public ResponseResult getPageViewRankList(int start, int end) {
+        redisZSetRankUtil.init(USER_PAGE_VIEW_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
     }
 }

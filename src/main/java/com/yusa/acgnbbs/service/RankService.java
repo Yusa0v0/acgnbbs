@@ -3,10 +3,12 @@ package com.yusa.acgnbbs.service;
 import com.yusa.acgnbbs.domain.ResponseResult;
 
 public interface RankService {
-    public ResponseResult getSignNumRank();
-    public ResponseResult getScoreRank();
-    public ResponseResult getFanNumRank();
-    public ResponseResult getPageViewRank();
+
+    ResponseResult getScoreRankList(int start,int end);
+    ResponseResult getSignNumRankList(int start,int end);
+
+    ResponseResult getFanNumRankList(int start,int end);
+    ResponseResult getPageViewRankList(int start,int end);
 
 
 }

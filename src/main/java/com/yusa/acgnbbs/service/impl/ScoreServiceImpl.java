@@ -10,12 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.DefaultTypedTuple;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import static com.yusa.acgnbbs.constants.SystemConstants.USER_SCORE_SET;
 
+@Service
 public class ScoreServiceImpl implements ScoreService {
     @Autowired
     UserService userService;
@@ -25,13 +27,14 @@ public class ScoreServiceImpl implements ScoreService {
     RedisZSetRankUtil redisZSetRankUtil;
     @Override
     public ResponseResult addUserScore(int userId,int score) {
-        RedisZSetRankUtil redisZSetRankUtil = new RedisZSetRankUtil();
+        redisZSetRankUtil.init(USER_SCORE_SET,userId);
         redisZSetRankUtil.incrementScore(score);
-        return null;
+        return ResponseResult.okResult();
     }
     @Override
     public ResponseResult getUserScore(int userId) {
-        return null;
+        redisZSetRankUtil.init(USER_SCORE_SET,userId);
+        Double userScore = redisZSetRankUtil.getUserScore();
+        return new ResponseResult(200,"OK",userScore);
     }
-
 }

@@ -62,14 +62,14 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult animationPostList(int pageNum, int pageSize) {
         Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_ANIMATION);
+        lambdaQueryWrapper.orderByDesc(Post::getCreatedAt).
+                eq(Post::getCategoryId, POST_CATEGORY_ANIMATION);
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
         System.out.println("总条数"+total);
         // 转换成VO
         List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
-        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
 
         for (PostListVO postListVO :
                 postListVOList) {
@@ -87,14 +87,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult comicPostList(int pageNum, int pageSize) {
         Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_COMIC);
+        lambdaQueryWrapper.orderByDesc(Post::getCreatedAt).eq(Post::getCategoryId, POST_CATEGORY_COMIC);
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
         System.out.println("总页数"+total);
         // 转换成VO
         List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
-        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
 
         for (PostListVO postListVO :
                 postListVOList) {
@@ -112,7 +111,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult gamePostList(int pageNum, int pageSize) {
         Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_GAME);
+        lambdaQueryWrapper.orderByDesc(Post::getCreatedAt).eq(Post::getCategoryId, POST_CATEGORY_GAME);
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
@@ -137,14 +136,13 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult novelPostList(int pageNum, int pageSize) {
         Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getCategoryId, POST_CATEGORY_NOVEL);
+        lambdaQueryWrapper.orderByDesc(Post::getCreatedAt).eq(Post::getCategoryId, POST_CATEGORY_NOVEL);
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
         System.out.println("总页数"+total);
         // 转换成VO
         List<PostListVO> postListVOList =BeanCopyUtils.copyBeanList(posts, PostListVO.class);
-        LambdaQueryWrapper<User> lambdaQueryWrapper2 = new LambdaQueryWrapper();
 
         for (PostListVO postListVO :
                 postListVOList) {
@@ -162,7 +160,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     public ResponseResult userPostList(int pageNum, int pageSize, int userId) {
         Page page = PageHelper.startPage(pageNum, pageSize);
         LambdaQueryWrapper<Post> lambdaQueryWrapper = new LambdaQueryWrapper();
-        lambdaQueryWrapper.eq(Post::getAuthorId, userId);
+        lambdaQueryWrapper.orderByDesc(Post::getCreatedAt).eq(Post::getAuthorId, userId);
         List<Post> posts = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数

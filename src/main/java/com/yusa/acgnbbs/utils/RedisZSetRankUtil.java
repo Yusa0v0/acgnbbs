@@ -48,15 +48,25 @@ public class RedisZSetRankUtil {
         System.out.println("批量新增时间:" +(System.currentTimeMillis() - start));
         System.out.println("受影响行数：" + num);
     }
+    public void batchDel(){
+        redisTemplate.opsForZSet().removeRange(USER_SCORE_SET,0,10);
+    }
+
     // 获取排名（start从0开始）
-    public void getRankList(int start,int end) {
+    public  Set<String> getRankListWithoutScore(int start,int end) {
         Set<String> range = redisTemplate.opsForZSet().reverseRange(this.key, start, end);
-        System.out.println("获取到的排行列表:" + JSON.toJSONString(range));
+        String s = JSON.toJSONString(range);
+        System.out.println("获取到的排行列表:" + s);
+        return range;
+    }
+    public Set<ZSetOperations.TypedTuple<String>>  getRankListWithScore(int start,int end) {
+        System.out.println(this.key+start+end);
         Set<ZSetOperations.TypedTuple<String>> rangeWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(this.key, start, end);
-        System.out.println("获取到的排行和分数列表:" + JSON.toJSONString(rangeWithScores));
+        String s = JSON.toJSONString(rangeWithScores);
+        System.out.println("获取到的排行和分数列表:" + s);
+        return rangeWithScores;
     }
     // 获取单人排行
-
     public Double getUserScore(){
         Double score = redisTemplate.opsForZSet().score(this.key, this.userInfoVO);
         System.out.println("单人分数:" + score);
@@ -74,4 +84,6 @@ public class RedisZSetRankUtil {
         System.out.println("分数增加后：" + score);
         return score;
     }
+
+
 }

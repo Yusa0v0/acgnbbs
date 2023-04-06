@@ -37,7 +37,7 @@ public class FavoriteServiceImpl implements FavoriteService {
     public ResponseResult userFavoriteList(int currentPage,int pageSize,int userId) {
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Favorite>  lambdaQueryWrapper= new LambdaQueryWrapper<>();
-        lambdaQueryWrapper.eq(Favorite::getUserId,userId);
+        lambdaQueryWrapper.orderByDesc(Favorite::getCreatedAt).eq(Favorite::getUserId,userId);
         List<Favorite> favorites = favoriteMapper.selectList(lambdaQueryWrapper);
         List<Post> postList= new ArrayList<>();
         PageInfo info = new PageInfo<>(page.getResult());

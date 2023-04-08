@@ -31,4 +31,8 @@ public class RankController {
     public ResponseResult getPostNumRankList(){
         return rankService.getPostNumRankList(0,10);
     }
+    @GetMapping("/commentNumRankList")
+    public ResponseResult getCommentNumRankList(){
+        return rankService.getCommentNumRankList(0,10);
+    }
 }

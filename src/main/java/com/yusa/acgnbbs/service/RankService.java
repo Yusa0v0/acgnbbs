@@ -10,6 +10,7 @@ public interface RankService {
     ResponseResult getFanNumRankList(int start,int end);
     ResponseResult getPageViewRankList(int start,int end);
     ResponseResult getPostNumRankList(int start,int end);
+    ResponseResult getCommentNumRankList(int start,int end);
 
 
 }

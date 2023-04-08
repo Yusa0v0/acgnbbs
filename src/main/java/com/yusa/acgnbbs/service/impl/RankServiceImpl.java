@@ -59,4 +59,11 @@ public class RankServiceImpl implements RankService {
         return new ResponseResult(200,"OK",rankListWithScore);
 
     }
+
+    @Override
+    public ResponseResult getCommentNumRankList(int start, int end) {
+        redisZSetRankUtil.init(USER_COMMENT_NUM_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
+    }
 }

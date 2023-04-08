@@ -178,6 +178,6 @@ class AcgnbbsApplicationTests {
     }
     @Test
     public void syncPost(){
-        syncService.SyncPostNum();
+        syncService.SyncCommentNum();
     }
 }

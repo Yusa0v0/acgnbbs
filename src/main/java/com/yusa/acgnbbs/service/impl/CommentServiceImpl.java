@@ -15,6 +15,7 @@ import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.CommentService;
 import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
+import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.RegexValidateUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.CommentVO;
@@ -24,6 +25,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+
+import static com.yusa.acgnbbs.constants.SystemConstants.USER_COMMENT_NUM_SET;
 
 
 @Service
@@ -38,6 +41,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     UserServiceImpl userService;
     @Autowired
     SecurityUitl securityUitl;
+    @Autowired
+    RedisZSetRankUtil redisZSetRankUtil;
     @Override
     public ResponseResult postComment(int currentPage, int pageSize,int postId) {
         Page page = PageHelper.startPage(currentPage, pageSize);
@@ -89,6 +94,8 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         comment.setLikeTimes(0);
         comment.setDelFlag(0);
         commentMapper.insert(comment);
+        redisZSetRankUtil.init(USER_COMMENT_NUM_SET,loginId);
+        redisZSetRankUtil.incrementScore(1);
         return new ResponseResult(200,"OK",null);
     }
 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.service.FollowService;
 import com.yusa.acgnbbs.service.ScoreService;
+import com.yusa.acgnbbs.service.SyncService;
 import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.RedisCache;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
@@ -50,6 +51,8 @@ class AcgnbbsApplicationTests {
     PasswordEncoder passwordEncoder;
     @Autowired
     RedisCache redisCache;
+    @Autowired
+    SyncService syncService;
     @Test
     public void testBcrypt(){
         String encode = passwordEncoder.encode("123456");
@@ -172,5 +175,9 @@ class AcgnbbsApplicationTests {
                 followService.follow(userId,followedId);
             }
         }
+    }
+    @Test
+    public void syncPost(){
+        syncService.SyncPostNum();
     }
 }

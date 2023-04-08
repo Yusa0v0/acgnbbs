@@ -50,6 +50,9 @@ public class SystemConstants {
      */
     public static final String USER_PAGE_VIEW_SET="userPageViewSet";
 
+    public static final String USER_POST_NUM_SET="userPostNumSet";
+
+
     public static final int SYSTEM_START_YEAR=2019;
 
 }

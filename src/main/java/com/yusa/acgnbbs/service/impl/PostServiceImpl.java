@@ -13,6 +13,7 @@ import com.yusa.acgnbbs.service.FavoriteService;
 import com.yusa.acgnbbs.service.LikeService;
 import com.yusa.acgnbbs.service.PostService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
+import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     LikeService likeService;
     @Autowired
     SecurityUitl securityUitl;
+    @Autowired
+    RedisZSetRankUtil redisZSetRankUtil;
     @Override
     public ResponseResult hotPostList() {
         return null;
@@ -237,6 +240,8 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
             post.setDelFlag(0);
 //        post.setId(9);
             int insert = postMapper.insert(post);
+            redisZSetRankUtil.init(USER_POST_NUM_SET,user.getId());
+            redisZSetRankUtil.incrementScore(1);
         }
         // 否则为更新
         else {

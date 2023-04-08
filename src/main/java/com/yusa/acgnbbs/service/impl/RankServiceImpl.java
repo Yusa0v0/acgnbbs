@@ -51,4 +51,12 @@ public class RankServiceImpl implements RankService {
         Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
         return new ResponseResult(200,"OK",rankListWithScore);
     }
+
+    @Override
+    public ResponseResult getPostNumRankList(int start, int end) {
+        redisZSetRankUtil.init(USER_POST_NUM_SET,1);
+        Set<ZSetOperations.TypedTuple<String>> rankListWithScore = redisZSetRankUtil.getRankListWithScore(start, end);
+        return new ResponseResult(200,"OK",rankListWithScore);
+
+    }
 }

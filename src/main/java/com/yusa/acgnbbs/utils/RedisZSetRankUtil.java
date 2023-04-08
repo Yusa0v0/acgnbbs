@@ -77,6 +77,12 @@ public class RedisZSetRankUtil {
         System.out.println("单人排名：" + rankNum);
         return rankNum;
     }
+    public Double fetchScore(Double score){
+        redisTemplate.opsForZSet().add(this.key,  this.userInfoVO, score);
+        System.out.println("增加的分数为：" + score);
+        System.out.println("分数增加后：" + score);
+        return score;
+    }
     // 增加积分
     public Double incrementScore(int addScore){
         Double score = redisTemplate.opsForZSet().incrementScore(this.key,  this.userInfoVO, addScore);

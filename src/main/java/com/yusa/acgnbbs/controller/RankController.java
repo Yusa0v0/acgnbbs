@@ -27,5 +27,8 @@ public class RankController {
     public ResponseResult getFanNumRankList(){
         return rankService.getFanNumRankList(0,10);
     }
-
+    @GetMapping("/postNumRankList")
+    public ResponseResult getPostNumRankList(){
+        return rankService.getPostNumRankList(0,10);
+    }
 }

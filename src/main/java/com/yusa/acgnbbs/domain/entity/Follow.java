@@ -77,5 +77,16 @@ public class Follow implements Serializable {
         this.updateTime = updateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Follow{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", followedId=" + followedId +
+                ", status=" + status +
+                ", createTime=" + createTime +
+                ", updateTime=" + updateTime +
+                '}';
+    }
 }
 

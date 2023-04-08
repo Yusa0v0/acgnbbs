@@ -23,5 +23,9 @@ public class RankController {
     public ResponseResult getSignNumRankList(){
         return rankService.getSignNumRankList(0,10);
     }
+    @GetMapping("/fanNumRankList")
+    public ResponseResult getFanNumRankList(){
+        return rankService.getFanNumRankList(0,10);
+    }
 
 }

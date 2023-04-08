@@ -22,6 +22,10 @@ public class FollowController {
     public ResponseResult cancelFollow(@PathVariable("userId") int userId, @PathVariable("followedId") int followedId){
         return followService.cancelFollow(userId,followedId);
     }
+    @GetMapping("/getIsFollowed/{fromId}/{toId}")
+    public ResponseResult getIsFollowed(@PathVariable("fromId") int fromId, @PathVariable("toId") int toId){
+        return followService.getIsFollowed(fromId,toId);
+    }
     @GetMapping("/followList/{userId}/{currentPage}/{pageSize}")
     public ResponseResult followList(@PathVariable("userId") int userId,@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize ){
         return followService.getFollowList(currentPage,pageSize,userId);

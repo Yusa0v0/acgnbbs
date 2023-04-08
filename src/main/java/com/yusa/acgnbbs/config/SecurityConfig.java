@@ -66,8 +66,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/favorite/**/").authenticated()
                 .antMatchers("/like/**/").authenticated()
                 .antMatchers("/follow/**/").permitAll()
-                .antMatchers("/follow/addFollow/").authenticated()
-                .antMatchers("/follow/cancelFollow/").authenticated()
+//                .antMatchers("/follow/addFollow/").authenticated()
+//                .antMatchers("/follow/cancelFollow/").authenticated()
                 .antMatchers("/eduoss/fileoss/").permitAll()
                 .antMatchers("/favorite/userFavoriteList/{userId}/{currentPage}/{pageSize}").permitAll()
 

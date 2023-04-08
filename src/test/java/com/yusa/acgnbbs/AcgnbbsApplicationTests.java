@@ -2,6 +2,7 @@ package com.yusa.acgnbbs;
 
 import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.service.FollowService;
 import com.yusa.acgnbbs.service.ScoreService;
 import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.RedisCache;
@@ -40,7 +41,8 @@ class AcgnbbsApplicationTests {
     UserService userService;
     @Autowired
     RedisZSetRankUtil redisZSetRankUtil;
-
+    @Autowired
+    FollowService followService;
     @Test
     void contextLoads() {
     }
@@ -159,6 +161,15 @@ class AcgnbbsApplicationTests {
                 redisZSetRankUtil.init(USER_SIGN_NUM_SET, userId);
                 // add one
                 redisZSetRankUtil.incrementScore(1);
+            }
+        }
+    }
+    @Test
+    public void batchFollow(){
+        for(int userId=1;userId<=10;++userId) {
+            //4：获取今天是当月的第几天
+            for(int followedId =1;followedId<=10;++followedId) {
+                followService.follow(userId,followedId);
             }
         }
     }

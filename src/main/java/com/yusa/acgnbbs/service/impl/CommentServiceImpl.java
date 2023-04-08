@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Objects;
 
 import static com.yusa.acgnbbs.constants.SystemConstants.USER_COMMENT_NUM_SET;
 
@@ -69,6 +70,7 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.orderByDesc(Comment::getCreatedAt).eq(Comment::getUserId, userId);
+
         List<Comment> comments = list(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
@@ -77,7 +79,12 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<UserCommentVO> commentVOList = BeanCopyUtils.copyBeanList(comments, UserCommentVO.class);
         System.out.println(commentVOList);
         for (UserCommentVO userCommentVO : commentVOList) {
-            userCommentVO.setPostTitle(postMapper.selectById(userCommentVO.getPostId()).getTitle());
+            String title="该帖已被删除";
+            Post post = postMapper.selectById(userCommentVO.getPostId());
+            if(!Objects.isNull(post)){
+                title=post.getTitle();
+            }
+            userCommentVO.setPostTitle(title);
         }
         UserCommentTotalVO userCommentTotalVO = new UserCommentTotalVO(commentVOList, total);
         return ResponseResult.okResult(userCommentTotalVO);
@@ -96,6 +103,18 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         commentMapper.insert(comment);
         redisZSetRankUtil.init(USER_COMMENT_NUM_SET,loginId);
         redisZSetRankUtil.incrementScore(1);
+        return new ResponseResult(200,"OK",null);
+    }
+
+    @Override
+    public ResponseResult deleteComment(int userId, int commentId) {
+        int loginId = securityUitl.getUserId();
+        if(userId!=loginId){
+            return new ResponseResult(403,"删除评论失败",null);
+        }
+        redisZSetRankUtil.init(USER_COMMENT_NUM_SET,userId);
+        redisZSetRankUtil.incrementScore(-1);
+        commentMapper.deleteById(commentId);
         return new ResponseResult(200,"OK",null);
     }
 }

@@ -264,8 +264,16 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     }
 
     @Override
-    public ResponseResult deletePost(int postId) {
-        //TODO
+    public ResponseResult deletePost(int userId,int postId) {
+        int userId1 = securityUitl.getUserId();
+        if(userId!=userId1){
+            return new  ResponseResult(200,"delete failed",null);
+        }
+        Post post = postMapper.selectById(postId);
+        Integer authorId = post.getAuthorId();
+        redisZSetRankUtil.init(USER_POST_NUM_SET,authorId);
+        redisZSetRankUtil.incrementScore(-1);
+        postMapper.deleteById(postId);
         return new  ResponseResult(200,"delete success",null);
     }
 }

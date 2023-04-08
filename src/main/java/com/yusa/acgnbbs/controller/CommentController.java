@@ -25,4 +25,8 @@ public class CommentController {
     public ResponseResult addComment(@RequestBody Comment comment){
         return commentService.addComment(comment);
     }
+    @GetMapping("/deleteComment/{userId}/{commentId}")
+    public ResponseResult deleteComment(@PathVariable("userId") int userId,@PathVariable("commentId") int commentId){
+        return commentService.deleteComment(userId,commentId);
+    }
 }

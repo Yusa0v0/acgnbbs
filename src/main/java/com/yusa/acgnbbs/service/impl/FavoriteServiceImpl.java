@@ -44,7 +44,10 @@ public class FavoriteServiceImpl implements FavoriteService {
         Long total = info.getTotal();//获取总条数
         System.out.println("total:"+total);
         for (Favorite favorite: favorites) {
-            postList.add(postMapper.selectById(favorite.getPostId()));
+            Post post = postMapper.selectById(favorite.getPostId());
+            if(!Objects.isNull(post)) {
+                postList.add(post);
+            }
         }
         List<FavoritePostVO> favoritePostVOS = BeanCopyUtils.copyBeanList(postList, FavoritePostVO.class);
         for (FavoritePostVO favorite: favoritePostVOS) {

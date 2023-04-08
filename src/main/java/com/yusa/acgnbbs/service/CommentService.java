@@ -8,5 +8,6 @@ public interface CommentService {
     ResponseResult postComment(int currentPages, int pageSize,int postId);
     ResponseResult userComment(int currentPage, int pageSize,int userId);
     ResponseResult addComment(Comment comment);
+    ResponseResult deleteComment(int userId,int commentId);
 
 }

@@ -2,6 +2,7 @@ package com.yusa.acgnbbs.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.util.Date;
@@ -34,7 +35,7 @@ public class Post implements Serializable {
     private Date updateAt;
     
     private String summary;
-    
+    @TableLogic
     private Integer delFlag;
 
 

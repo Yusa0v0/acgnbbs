@@ -2,6 +2,7 @@ package com.yusa.acgnbbs.domain.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableLogic;
 import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.io.Serializable;
@@ -28,12 +29,10 @@ public class User implements Serializable {
     
     private String password;
     
-    private Integer isBanned;
-    
-    private Integer delFlag;
-    
     private String avatar;
-
+    private Integer isBanned;
+    @TableLogic
+    private Integer delFlag;
 
     public Integer getId() {
         return id;

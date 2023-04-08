@@ -1,5 +1,7 @@
 package com.yusa.acgnbbs.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.TableLogic;
+
 import java.util.Date;
 import java.io.Serializable;
 
@@ -21,6 +23,8 @@ public class Notice implements Serializable {
     private String content;
     
     private Date createdAt;
+    @TableLogic
+    private Integer delFlag;
 
 
     public Integer getId() {

@@ -28,10 +28,10 @@ public class FollowController {
     }
     @GetMapping("/followList/{userId}/{currentPage}/{pageSize}")
     public ResponseResult followList(@PathVariable("userId") int userId,@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize ){
-        return followService.getFollowList(currentPage,pageSize,userId);
+        return followService.getFollowList(userId,currentPage,pageSize);
     }
     @GetMapping("/fansList/{userId}/{currentPage}/{pageSize}")
     public ResponseResult fansList(@PathVariable("userId") int userId,@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize ){
-        return followService.getFansList(currentPage,pageSize,userId);
+        return followService.getFansList(userId,currentPage,pageSize);
     }
 }

@@ -84,13 +84,15 @@ public class FavoriteServiceImpl implements FavoriteService {
     }
 
     @Override
-    public ResponseResult deleteFavorite(int userId,int postIds) {
+    public ResponseResult deleteFavorite(int userId,int postId) {
         int loginId = securityUitl.getUserId();
         if(userId!=loginId){
             return new ResponseResult(403,"登录状态异常",null);
         }
         LambdaQueryWrapper<Favorite> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.eq(Favorite::getUserId,userId);
+        lambdaQueryWrapper.eq(Favorite::getPostId,postId);
+
         favoriteMapper.delete(lambdaQueryWrapper);
         return new ResponseResult(200,"OK",null);
     }

@@ -133,7 +133,6 @@ class AcgnbbsApplicationTests {
     @Test
     // 批量新增
     public void batchAdd() {
-        redisTemplate.opsForZSet().removeRange(USER_SCORE_SET,0,11);
 
     }
     @Test
@@ -179,5 +178,12 @@ class AcgnbbsApplicationTests {
     @Test
     public void syncPost(){
         syncService.SyncCommentNum();
+        syncService.SyncPostNum();
+        syncService.SyncFanNum();
+    }
+    @Test
+    public void sd() {
+        redisTemplate.opsForZSet().removeRange( USER_SIGN_NUM_SET,0,10);
+
     }
 }

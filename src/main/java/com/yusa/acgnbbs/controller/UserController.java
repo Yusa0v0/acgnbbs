@@ -36,6 +36,11 @@ public class UserController {
         return userService.setUserInfo(user);
     }
 
+    @GetMapping("/user/userInfoList/{currentPage}/{pageSize}")
+    public ResponseResult getUserInfoList(@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize){
+        return userService.getUserInfoList(currentPage,pageSize);
+    }
+
     // username
     @GetMapping("/user/sendCaptcha/{username}")
     public ResponseResult sendCaptcha(@PathVariable String username){

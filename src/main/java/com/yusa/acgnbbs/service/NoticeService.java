@@ -5,5 +5,7 @@ import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Notice;
 
 public interface NoticeService   {
-    ResponseResult noticeList();
+    ResponseResult noticeList(int currentPage, int pageSize);
+    ResponseResult addNotice(Notice notice);
+    ResponseResult deleteNotice(int noticeId);
 }

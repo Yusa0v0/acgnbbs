@@ -1,24 +1,26 @@
 package com.yusa.acgnbbs.vo;
 
+import com.yusa.acgnbbs.domain.entity.Notice;
+
 import java.util.List;
 
-public class UserInfoTotalVO {
-    List<UserInfoVO> userInfoList;
+public class NoticeTotalVO {
+    List<Notice> userInfoList;
     Long total;
 
-    public UserInfoTotalVO() {
+    public NoticeTotalVO() {
     }
 
-    public UserInfoTotalVO(List<UserInfoVO> userInfoList, Long total) {
+    public NoticeTotalVO(List<Notice> userInfoList, Long total) {
         this.userInfoList = userInfoList;
         this.total = total;
     }
 
-    public List<UserInfoVO> getUserInfoVOList() {
+    public List<Notice> getUserInfoList() {
         return userInfoList;
     }
 
-    public void setUserInfoVOList(List<UserInfoVO> userInfoList) {
+    public void setUserInfoList(List<Notice> userInfoList) {
         this.userInfoList = userInfoList;
     }
 
@@ -32,7 +34,7 @@ public class UserInfoTotalVO {
 
     @Override
     public String toString() {
-        return "UserInfoTotalVO{" +
+        return "NoticeTotalVO{" +
                 "userInfoList=" + userInfoList +
                 ", total=" + total +
                 '}';

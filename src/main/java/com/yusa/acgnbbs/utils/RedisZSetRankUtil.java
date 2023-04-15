@@ -48,7 +48,7 @@ public class RedisZSetRankUtil {
         for (String key:keyList){
             this.key=key;
             this.userInfoVO=originUserInfo;
-            System.out.println("originUserInfo:"+ this.userInfoVO);
+//            System.out.println("originUserInfo:"+ this.userInfoVO);
             // 保存origin的score
             Double userScore = getUserScore();
             // 如果查到空，则不删除
@@ -60,7 +60,7 @@ public class RedisZSetRankUtil {
                 redisTemplate.opsForZSet().remove(this.key,this.userInfoVO);
                 // 新增update
                 this.userInfoVO = updatedUserInfo;
-                System.out.println("updatedUserInfo:" + this.userInfoVO);
+//                System.out.println("updatedUserInfo:" + this.userInfoVO);
                 fetchScore(userScore);
             }
         }
@@ -101,7 +101,7 @@ public class RedisZSetRankUtil {
     // 获取单人排行
     public Double getUserScore(){
         Double score = redisTemplate.opsForZSet().score(this.key, this.userInfoVO);
-        System.out.println("单人分数:" + score);
+//        System.out.println("单人分数:" + score);
         return score;
     }
     public Long getUserRankNum(){

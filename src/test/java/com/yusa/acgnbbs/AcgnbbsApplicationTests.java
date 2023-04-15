@@ -2,10 +2,7 @@ package com.yusa.acgnbbs;
 
 import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
-import com.yusa.acgnbbs.service.FollowService;
-import com.yusa.acgnbbs.service.ScoreService;
-import com.yusa.acgnbbs.service.SyncService;
-import com.yusa.acgnbbs.service.UserService;
+import com.yusa.acgnbbs.service.*;
 import com.yusa.acgnbbs.utils.RedisCache;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
@@ -22,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -185,5 +183,37 @@ class AcgnbbsApplicationTests {
     public void sd() {
         redisTemplate.opsForZSet().removeRange( USER_SIGN_NUM_SET,0,10);
 
+    }
+    @Autowired
+    StatisticsService statisticsService;
+    @Test
+    public void s() {
+        statisticsService.increaseDailyStatistics(DAILY_COMMENT_STATISTICS_KEY);
+        System.out.println(statisticsService.getLastWeekStatistics(DAILY_COMMENT_STATISTICS_KEY).getData());
+        System.out.println(statisticsService.getLastWeekStatistics(DAILY_USER_STATISTICS_KEY).getData());
+    }
+    @Test
+    public void batchAddDaily() {
+        LocalDateTime now = LocalDateTime.now();
+        // 获取当前日期所在星期的第一天（星期一）的日期
+        LocalDateTime firstDayOfCurrentWeek = now.with(DayOfWeek.MONDAY);
+        // 获取当前日期所在星期的第一天（星期一）的前一星期的第一天（即上一星期的星期一）的日期
+        LocalDateTime firstDayOfPreviousWeek = firstDayOfCurrentWeek.minusWeeks(1);
+        // 输出上一星期的每一天的日期
+        Random rand=new Random();
+        int min = 1000;
+        int max = 10000;
+        for (int i = 0; i < 7; i++) {
+            LocalDateTime currentDay = firstDayOfPreviousWeek.plusDays(i);
+            String keySuffix = currentDay.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+            // 清零
+            redisTemplate.opsForValue().set(DAILY_COMMENT_STATISTICS_KEY+keySuffix,0);
+            redisTemplate.opsForValue().set(DAILY_USER_STATISTICS_KEY+keySuffix,0);
+            int i1 =  rand.nextInt(max - min + 1) + min;
+            statisticsService.increaseDailyStatisticsWithValue(DAILY_COMMENT_STATISTICS_KEY,keySuffix,i1);
+            int i2 =  rand.nextInt(max - min + 1) + min;
+            statisticsService.increaseDailyStatisticsWithValue(DAILY_USER_STATISTICS_KEY,keySuffix,i2);
+
+        }
     }
 }

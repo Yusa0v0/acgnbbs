@@ -33,6 +33,11 @@ public class SystemConstants {
 
     public static final String USER_SIGN_KEY="sign:";
 
+    public static final String DAILY_COMMENT_STATISTICS_KEY="dailyComment:";
+
+    public static final String DAILY_USER_STATISTICS_KEY="dailyUser:";
+
+
     /**
      * 签到的时候用到
      */

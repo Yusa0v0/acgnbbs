@@ -57,7 +57,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/logout").authenticated()
                 .antMatchers("/user/userInfo/{id}").permitAll()
                 .antMatchers("/user/userInfo/").authenticated()
-                .antMatchers("/notice/noticeList").permitAll()
+                .antMatchers("/user/userInfoList/{currentPage}/{pageSize}").permitAll()
+
+                .antMatchers("/notice/**/").permitAll()
+
                 .antMatchers("/user/sendCaptcha/{phone}").permitAll()
                 .antMatchers("/user/sendEmail/{toEmail}").permitAll()
                 .antMatchers("/user/register").permitAll()
@@ -79,6 +82,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/swagger-ui.html").permitAll()
 
+                .antMatchers("/statistics/**/").permitAll()
 
 //                .antMatchers("/user/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证

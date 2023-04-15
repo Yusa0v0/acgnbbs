@@ -1,5 +1,7 @@
 package com.yusa.acgnbbs.domain.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableLogic;
 
 import java.util.Date;
@@ -13,7 +15,7 @@ import java.io.Serializable;
  */
 public class Notice implements Serializable {
     private static final long serialVersionUID = 910217272536448827L;
-    
+    @TableId(type = IdType.AUTO)
     private Integer id;
     
     private String createdAdminName;
@@ -66,16 +68,24 @@ public class Notice implements Serializable {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
+    public Integer getDelFlag() {
+        return delFlag;
+    }
 
+    public void setDelFlag(Integer delFlag) {
+        this.delFlag = delFlag;
+    }
     public Notice() {
     }
 
-    public Notice(Integer id, String createdAdminName, String title, String content, Date createdAt) {
+
+    public Notice(Integer id, String createdAdminName, String title, String content, Date createdAt, Integer delFlag) {
         this.id = id;
         this.createdAdminName = createdAdminName;
         this.title = title;
         this.content = content;
         this.createdAt = createdAt;
+        this.delFlag = delFlag;
     }
 
     @Override
@@ -86,6 +96,7 @@ public class Notice implements Serializable {
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
                 ", createdAt=" + createdAt +
+                ", delFlag=" + delFlag +
                 '}';
     }
 }

@@ -10,7 +10,8 @@ public interface UserService {
 
      String getUserAvatar(int id);
      String getUsername(int id);
-
+     ResponseResult banUser(int id);
+     ResponseResult cancelBanUser(int id);
 
 
 

@@ -10,9 +10,7 @@ import com.yusa.acgnbbs.service.UserService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
 import com.yusa.acgnbbs.utils.SecurityUitl;
-import com.yusa.acgnbbs.vo.CommentVO;
-import com.yusa.acgnbbs.vo.UserInfoTotalVO;
-import com.yusa.acgnbbs.vo.UserInfoVO;
+import com.yusa.acgnbbs.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
@@ -71,9 +69,9 @@ public class UserServiceImpl implements UserService {
 //        lambdaQueryWrapper.orderByDesc(User::getId);
         List<User> users = userMapper.selectList(lambdaQueryWrapper);
         long total = page.getTotal();
-        List<UserInfoVO> userInfoList = BeanCopyUtils.copyBeanList(users, UserInfoVO.class);
-        UserInfoTotalVO userInfoTotalVO = new UserInfoTotalVO(userInfoList, total);
-        return ResponseResult.okResult(userInfoTotalVO);
+        List<UserManagementVO> userManagementVOList = BeanCopyUtils.copyBeanList(users, UserManagementVO.class);
+        UserManagementTotalVO userManagementTotalVO = new UserManagementTotalVO(userManagementVOList, total);
+        return ResponseResult.okResult(userManagementTotalVO);
     }
 
     public String getUserAvatar(int id){
@@ -94,6 +92,21 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.selectOne(lambdaQueryWrapper);
         String username = user.getUsername();
         return username;
+    }
+
+    @Override
+    public ResponseResult banUser(int id) {
+        User user = userMapper.selectById(id);
+        user.setIsBanned(1);
+        userMapper.updateById(user);
+        return ResponseResult.okResult();
+    }
+    @Override
+    public ResponseResult cancelBanUser(int id) {
+        User user = userMapper.selectById(id);
+        user.setIsBanned(0);
+        userMapper.updateById(user);
+        return ResponseResult.okResult();
     }
 
 

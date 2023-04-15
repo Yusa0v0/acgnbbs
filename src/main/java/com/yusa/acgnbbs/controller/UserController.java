@@ -40,7 +40,14 @@ public class UserController {
     public ResponseResult getUserInfoList(@PathVariable("currentPage") int currentPage,@PathVariable("pageSize") int pageSize){
         return userService.getUserInfoList(currentPage,pageSize);
     }
-
+    @GetMapping("/user/banUser/{id}")
+    public ResponseResult banUser(@PathVariable int id){
+        return userService.banUser(id);
+    }
+    @GetMapping("/user/cancelBanUser/{id}")
+    public ResponseResult cancelBanUser(@PathVariable int id){
+        return userService.cancelBanUser(id);
+    }
     // username
     @GetMapping("/user/sendCaptcha/{username}")
     public ResponseResult sendCaptcha(@PathVariable String username){

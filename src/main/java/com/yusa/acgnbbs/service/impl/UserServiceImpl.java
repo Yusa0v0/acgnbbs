@@ -32,6 +32,7 @@ public class UserServiceImpl implements UserService {
     RedisZSetRankUtil redisZSetRankUtil;
     @Override
     public ResponseResult setUserInfo(User user) {
+        System.out.println("user:"+user);
         // 获取前端传的id
         int id = user.getId();
         // 获取token中的id

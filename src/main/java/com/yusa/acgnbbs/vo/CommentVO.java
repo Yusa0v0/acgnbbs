@@ -18,6 +18,15 @@ public class CommentVO {
     private Date createdAt;
 
     private String avatar;
+    private Integer userGender;
+
+    public Integer getGender() {
+        return userGender;
+    }
+
+    public void setGender(Integer userGender) {
+        this.userGender = userGender;
+    }
 
     public String getAvatar() {
         return avatar;
@@ -83,5 +92,18 @@ public class CommentVO {
         this.createdAt = createdAt;
     }
 
-
+    @Override
+    public String toString() {
+        return "CommentVO{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", username='" + username + '\'' +
+                ", postId=" + postId +
+                ", content='" + content + '\'' +
+                ", likeTimes=" + likeTimes +
+                ", createdAt=" + createdAt +
+                ", avatar='" + avatar + '\'' +
+                ", userGender=" + userGender +
+                '}';
+    }
 }

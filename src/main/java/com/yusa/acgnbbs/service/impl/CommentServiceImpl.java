@@ -21,6 +21,7 @@ import com.yusa.acgnbbs.utils.SecurityUitl;
 import com.yusa.acgnbbs.vo.CommentVO;
 import com.yusa.acgnbbs.vo.UserCommentTotalVO;
 import com.yusa.acgnbbs.vo.UserCommentVO;
+import com.yusa.acgnbbs.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -48,7 +49,6 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
     public ResponseResult postComment(int currentPage, int pageSize,int postId) {
         Page page = PageHelper.startPage(currentPage, pageSize);
         long total = page.getTotal();
-        System.out.println(total);
         LambdaQueryWrapper<Comment> lambdaQueryWrapper = new LambdaQueryWrapper();
         lambdaQueryWrapper.eq(Comment::getPostId, postId);
         List<Comment> comments = list(lambdaQueryWrapper);
@@ -56,12 +56,16 @@ public class CommentServiceImpl extends ServiceImpl<CommentMapper, Comment> impl
         List<CommentVO> commentVOList = BeanCopyUtils.copyBeanList(comments, CommentVO.class);
         for (CommentVO commentVO: commentVOList) {
             Integer userId = commentVO.getUserId();
-            String userAvatar = userService.getUserAvatar(userId);
-            String username =userService.getUsername(userId);
+            UserInfoVO userInfoVO = (UserInfoVO)userService.getUserInfo(userId).getData();
+
+            String userAvatar = userInfoVO.getAvatar();
+            String username =userInfoVO.getUsername();
+            Integer gender =userInfoVO.getGender();
             commentVO.setAvatar(userAvatar);
             commentVO.setUsername(username);
+            commentVO.setGender(gender);
         }
-
+        System.out.println(commentVOList);
         return ResponseResult.okResult(commentVOList);
     }
 

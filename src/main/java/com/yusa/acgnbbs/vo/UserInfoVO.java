@@ -4,6 +4,13 @@ public class UserInfoVO
 {
     public UserInfoVO() {
     }
+    public UserInfoVO(UserInfoVO userInfoVO) {
+        this.id = userInfoVO.id;
+        this.username =  userInfoVO.username;
+        this.gender =  userInfoVO.gender;
+        this.bio =  userInfoVO.bio;
+        this.avatar =  userInfoVO.avatar;
+    }
 
     public UserInfoVO(Integer id, String username, Integer gender, String bio, String avatar) {
         this.id = id;

@@ -12,6 +12,9 @@ import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.service.FollowService;
 import com.yusa.acgnbbs.utils.BeanCopyUtils;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
+import com.yusa.acgnbbs.utils.SecurityUitl;
+import com.yusa.acgnbbs.vo.UserInfoFollowTotalVO;
+import com.yusa.acgnbbs.vo.UserInfoFollowVO;
 import com.yusa.acgnbbs.vo.UserInfoTotalVO;
 import com.yusa.acgnbbs.vo.UserInfoVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +35,8 @@ public class FollowServiceImpl implements FollowService {
     UserMapper userMapper;
     @Autowired
     RedisZSetRankUtil redisZSetRankUtil;
+    @Autowired
+    SecurityUitl securityUitl;
 
     @Override
     public ResponseResult follow(int userId, int followedId) {
@@ -107,27 +112,31 @@ public class FollowServiceImpl implements FollowService {
 
     @Override
     public ResponseResult getFollowList(int userId,int currentPage,int pageSize) {
+        int loginUserId = securityUitl.getUserId();
         Page page = PageHelper.startPage(currentPage, pageSize);
-
         LambdaQueryWrapper<Follow> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(Follow::getCreateTime).eq(Follow::getUserId,userId).eq(Follow::getStatus,1);
         List<Follow> followList = followMapper.selectList(lambdaQueryWrapper);
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
         System.out.println("total"+total);
-        List<UserInfoVO> userInfoVOList = new ArrayList<>();
+        List<UserInfoFollowVO> userInfoFollowVOList = new ArrayList<>();
+
         for (Follow follow:followList) {
             Integer followedId = follow.getFollowedId();
             User user = userMapper.selectById(followedId);
             UserInfoVO userInfoVO = BeanCopyUtils.copyBean(user, UserInfoVO.class);
-            userInfoVOList.add(userInfoVO);
+            Boolean isFollowed = (Boolean)getIsFollowed(loginUserId, followedId).getData();
+            UserInfoFollowVO userInfoFollowVO =new UserInfoFollowVO( isFollowed,userInfoVO);
+            userInfoFollowVOList.add(userInfoFollowVO);
         }
-        UserInfoTotalVO userInfoTotalVO = new UserInfoTotalVO(userInfoVOList, total);
-        return new ResponseResult<>(200,"OK",userInfoTotalVO);
+        UserInfoFollowTotalVO userInfoFollowTotalVO = new UserInfoFollowTotalVO(userInfoFollowVOList, total);
+        return new ResponseResult<>(200,"OK",userInfoFollowTotalVO);
     }
 
     @Override
     public ResponseResult getFansList(int userId,int currentPage,int pageSize) {
+        int loginUserId = securityUitl.getUserId();
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Follow> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         lambdaQueryWrapper.orderByDesc(Follow::getCreateTime).eq(Follow::getFollowedId,userId).eq(Follow::getStatus,1);
@@ -135,14 +144,16 @@ public class FollowServiceImpl implements FollowService {
         PageInfo info = new PageInfo<>(page.getResult());
         Long total = info.getTotal();//获取总条数
         System.out.println("total"+total);
-        List<UserInfoVO> userInfoVOList = new ArrayList<>();
+        List<UserInfoFollowVO> userInfoFollowVOList = new ArrayList<>();
         for (Follow follow:followList) {
             Integer fansId = follow.getUserId();
             User user = userMapper.selectById(fansId);
             UserInfoVO userInfoVO = BeanCopyUtils.copyBean(user, UserInfoVO.class);
-            userInfoVOList.add(userInfoVO);
+            Boolean isFollowed = (Boolean)getIsFollowed(loginUserId, fansId).getData();
+            UserInfoFollowVO userInfoFollowVO =new UserInfoFollowVO( isFollowed,userInfoVO);
+            userInfoFollowVOList.add(userInfoFollowVO);
         }
-        UserInfoTotalVO userInfoTotalVO = new UserInfoTotalVO(userInfoVOList, total);
-        return new ResponseResult<>(200,"OK",userInfoTotalVO);
+        UserInfoFollowTotalVO userInfoFollowTotalVO = new UserInfoFollowTotalVO(userInfoFollowVOList, total);
+        return new ResponseResult<>(200,"OK",userInfoFollowTotalVO);
     }
 }

@@ -61,6 +61,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/banUser/{id}").permitAll()
                 .antMatchers("/user/cancelBanUser/{id}").permitAll()
                 .antMatchers("/notice/**/").permitAll()
+                .antMatchers("/report/**/").permitAll()
 
                 .antMatchers("/user/sendCaptcha/{phone}").permitAll()
                 .antMatchers("/user/sendEmail/{toEmail}").permitAll()

@@ -1,6 +1,8 @@
 package com.yusa.acgnbbs.controller;
 
 import com.yusa.acgnbbs.domain.entity.Post;
+import com.yusa.acgnbbs.domain.entity.Report;
+import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.service.PostService;
 import com.yusa.acgnbbs.vo.PostDetailsVO;
 import com.yusa.acgnbbs.vo.PostSubmitVO;

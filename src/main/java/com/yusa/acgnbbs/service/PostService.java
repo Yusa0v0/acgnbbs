@@ -3,6 +3,7 @@ package com.yusa.acgnbbs.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yusa.acgnbbs.domain.ResponseResult;
 import com.yusa.acgnbbs.domain.entity.Post;
+import com.yusa.acgnbbs.domain.entity.Report;
 import com.yusa.acgnbbs.vo.PostDetailsVO;
 import com.yusa.acgnbbs.vo.PostSubmitVO;
 import org.springframework.stereotype.Service;
@@ -35,4 +36,11 @@ public interface PostService extends IService<Post> {
 
     ResponseResult getWritePost(int postId);
     ResponseResult deletePost(int userId,int postId);
+
+
+    /**
+     * 举报帖子
+     */
+
+
 }

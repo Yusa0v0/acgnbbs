@@ -45,6 +45,7 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
     SecurityUitl securityUitl;
     @Autowired
     RedisZSetRankUtil redisZSetRankUtil;
+
     @Override
     public ResponseResult hotPostList() {
         return null;
@@ -276,4 +277,6 @@ public class PostServiceImpl extends ServiceImpl<PostMapper, Post> implements Po
         postMapper.deleteById(postId);
         return new  ResponseResult(200,"delete success",null);
     }
+
+
 }

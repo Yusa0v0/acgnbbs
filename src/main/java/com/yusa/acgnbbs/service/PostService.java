@@ -37,6 +37,8 @@ public interface PostService extends IService<Post> {
     ResponseResult getWritePost(int postId);
     ResponseResult deletePost(int userId,int postId);
 
+    ResponseResult deletePostByAdmin(int postId);
+
 
     /**
      * 举报帖子

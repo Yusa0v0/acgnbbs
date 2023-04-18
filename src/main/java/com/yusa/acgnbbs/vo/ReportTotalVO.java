@@ -6,22 +6,22 @@ import com.yusa.acgnbbs.domain.entity.Report;
 import java.util.List;
 
 public class ReportTotalVO {
-    List<Report> reportList;
+    List<ReportVO> reportList;
     Long total;
 
     public ReportTotalVO() {
     }
 
-    public ReportTotalVO(List<Report> reportList, Long total) {
+    public ReportTotalVO(List<ReportVO> reportList, Long total) {
         this.reportList = reportList;
         this.total = total;
     }
 
-    public List<Report> getReportList() {
+    public List<ReportVO> getReportList() {
         return reportList;
     }
 
-    public void setReportList(List<Report> reportList) {
+    public void setReportList(List<ReportVO> reportList) {
         this.reportList = reportList;
     }
 

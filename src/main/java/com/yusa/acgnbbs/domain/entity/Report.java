@@ -17,7 +17,7 @@ public class Report implements Serializable {
     private static final long serialVersionUID = 593784190507786245L;
     @TableId(type = IdType.AUTO)
     private Integer id;
-    private Integer UserId;
+    private Integer userId;
 
     private Integer postId;
     private Integer isHandled;
@@ -28,6 +28,27 @@ public class Report implements Serializable {
     @TableLogic
     private Integer delFlag;
 
+    public Report() {
+    }
+
+    public Report(Integer id, Integer userId, Integer postId, Integer isHandled, String reportContent, Date createAt, Integer delFlag) {
+        this.id = id;
+        this.userId = userId;
+        this.postId = postId;
+        this.isHandled = isHandled;
+        this.reportContent = reportContent;
+        this.createAt = createAt;
+        this.delFlag = delFlag;
+    }
+    public Report(Report report) {
+        this.id = report.id;
+        userId = report.userId;
+        this.postId = report.postId;
+        this.isHandled = report.isHandled;
+        this.reportContent = report.reportContent;
+        this.createAt = report.createAt;
+        this.delFlag = report.delFlag;
+    }
 
     public Integer getId() {
         return id;
@@ -38,11 +59,11 @@ public class Report implements Serializable {
     }
 
     public Integer getUserId() {
-        return UserId;
+        return userId;
     }
 
     public void setUserId(Integer userId) {
-        UserId = userId;
+        this.userId = userId;
     }
 
     public Integer getPostId() {
@@ -89,7 +110,7 @@ public class Report implements Serializable {
     public String toString() {
         return "Report{" +
                 "id=" + id +
-                ", UserId=" + UserId +
+                ", userId=" + userId +
                 ", postId=" + postId +
                 ", isHandled=" + isHandled +
                 ", reportContent='" + reportContent + '\'' +

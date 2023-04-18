@@ -66,6 +66,10 @@ public class PostController {
     public ResponseResult deletePost(@PathVariable("userId") int userId,@PathVariable("postId") int postId){
         return postService.deletePost(userId,postId);
     }
-
+    @GetMapping("/deletePostByAdmin/{postId}")
+//    @PreAuthorize("hasAuthority('aAdmin')")
+    public ResponseResult deletePostByAdmin(@PathVariable("postId") int postId){
+        return postService.deletePostByAdmin(postId);
+    }
 
 }

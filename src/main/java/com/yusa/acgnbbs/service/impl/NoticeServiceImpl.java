@@ -23,6 +23,7 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     public ResponseResult noticeList(int currentPage, int pageSize) {
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Notice> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.orderByDesc(Notice::getId);
         List<Notice> notices = list(lambdaQueryWrapper);
         long total = page.getTotal();
         NoticeTotalVO noticeTotalVO = new NoticeTotalVO(notices, total);
@@ -50,5 +51,13 @@ public class NoticeServiceImpl extends ServiceImpl<NoticeMapper, Notice> impleme
     public ResponseResult deleteNotice(int noticeId) {
         noticeMapper.deleteById(noticeId);
         return ResponseResult.okResult();
+    }
+
+    @Override
+    public ResponseResult getNewNotice() {
+        LambdaQueryWrapper<Notice> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        List<Notice> notices = noticeMapper.selectList(lambdaQueryWrapper.orderByDesc(Notice::getCreatedAt).last("LIMIT 1"));
+        Notice notice =notices.get(0);
+        return new ResponseResult(200,"OK",notice);
     }
 }

@@ -24,4 +24,8 @@ public class NoticeController {
     public ResponseResult deleteNotice(@PathVariable("noticeId") int noticeId){
         return noticeService.deleteNotice(noticeId);
     }
+    @GetMapping("/getNewNotice")
+    public ResponseResult getNewNotice(){
+        return noticeService.getNewNotice();
+    }
 }

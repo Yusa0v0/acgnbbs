@@ -8,4 +8,5 @@ public interface NoticeService   {
     ResponseResult noticeList(int currentPage, int pageSize);
     ResponseResult addNotice(Notice notice);
     ResponseResult deleteNotice(int noticeId);
+    ResponseResult getNewNotice();
 }

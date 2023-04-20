@@ -46,6 +46,7 @@ public class ReportServiceImpl implements ReportService {
     public ResponseResult reportList(int currentPage, int pageSize) {
         Page page = PageHelper.startPage(currentPage, pageSize);
         LambdaQueryWrapper<Report> lambdaQueryWrapper = new LambdaQueryWrapper();
+        lambdaQueryWrapper.orderByDesc(Report::getCreateAt);
         List<Report> reports = reportMapper.selectList(lambdaQueryWrapper);
         List<ReportVO> reportVOS=new ArrayList<>();
         for (Report report: reports){

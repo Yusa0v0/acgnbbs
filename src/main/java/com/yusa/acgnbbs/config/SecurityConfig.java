@@ -86,9 +86,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/statistics/**/").permitAll()
 
+                //webSocket也会被拦截
+                .antMatchers("/webSocket/**/").permitAll()
+
 //                .antMatchers("/user/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
-                .anyRequest().anonymous();
+                .anyRequest().permitAll();
         http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 //        决定一下保留
 //        http.addFilterBefore(jwtAuthenticationFilter, LogoutFilter.class);

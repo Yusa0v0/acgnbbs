@@ -2,6 +2,8 @@ package com.yusa.acgnbbs;
 
 import com.alibaba.fastjson.JSON;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.domain.entity.Comment;
+import com.yusa.acgnbbs.mapper.CommentMapper;
 import com.yusa.acgnbbs.service.*;
 import com.yusa.acgnbbs.utils.RedisCache;
 import com.yusa.acgnbbs.utils.RedisZSetRankUtil;
@@ -51,16 +53,6 @@ class AcgnbbsApplicationTests {
     RedisCache redisCache;
     @Autowired
     SyncService syncService;
-    @Test
-    public void testBcrypt(){
-        String encode = passwordEncoder.encode("123456");
-        System.out.println(encode);
-        String encode2 = passwordEncoder.encode("jcy112");
-        System.out.println(encode2);
-        boolean matches = passwordEncoder.matches("jcy112", "$2a$10$5KWQD/B76oAaz0zszIo8euYUfhqlUpmdozMmnFvct6GY26RhwnwVe");
-        System.out.println(matches);
-    }
-
     @Test
     public void t(){
         // 签到
@@ -174,16 +166,32 @@ class AcgnbbsApplicationTests {
         }
     }
     @Test
-    public void syncPost(){
+    public void sync(){
         syncService.SyncCommentNum();
         syncService.SyncPostNum();
         syncService.SyncFanNum();
     }
-    @Test
-    public void sd() {
-        redisTemplate.opsForZSet().removeRange( USER_SIGN_NUM_SET,0,10);
-
+    @Autowired
+    CommentMapper commentMapper;
+    @Test void batchAddComment(){
+        for (int i=1;i<=10;++i){
+            Comment comment = new Comment();
+            comment.setUserId(i);
+            comment.setPostId(i+1);
+            comment.setContent("我是水军，我来评论了");
+            comment.setLikeTimes(0);
+            comment.setDelFlag(0);
+            int frontId = comment.getUserId();
+            comment.setUserId(frontId);
+            comment.setLikeTimes(0);
+            comment.setDelFlag(0);
+            commentMapper.insert(comment);
+            redisZSetRankUtil.init(USER_COMMENT_NUM_SET,frontId);
+            redisZSetRankUtil.incrementScore(1);
+        }
     }
+
+
     @Autowired
     StatisticsService statisticsService;
     @Test

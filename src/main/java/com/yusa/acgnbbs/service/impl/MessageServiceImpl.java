@@ -12,6 +12,7 @@ import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 import com.aliyuncs.utils.StringUtils;
 import com.yusa.acgnbbs.service.MessageService;
+import com.yusa.acgnbbs.utils.ConstantPropertiesUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Map;
@@ -23,8 +24,8 @@ public class MessageServiceImpl implements MessageService {
     public boolean send(Map<String,Object> map, String phone) {
         if(StringUtils.isEmpty(phone)) return false;
         DefaultProfile profile =
-                DefaultProfile.getProfile("default", "LTAI5tAk8D2qzbdS3eReCeSh",
-                        "rnja1HlrSWoq8NeyQAAY8i58dwEphk");
+                DefaultProfile.getProfile("default", ConstantPropertiesUtil.ACCESS_KEY_ID,
+                        ConstantPropertiesUtil.ACCESS_KEY_SECRET);
         IAcsClient client = new DefaultAcsClient(profile);
 
         CommonRequest request = new CommonRequest();
@@ -33,12 +34,10 @@ public class MessageServiceImpl implements MessageService {
         request.setDomain("dysmsapi.aliyuncs.com");
         request.setVersion("2017-05-25");
         request.setAction("SendSms");
-
         request.putQueryParameter("PhoneNumbers", phone);   //手机号
         request.putQueryParameter("SignName", "阿里云短信测试");    //签名名称
         request.putQueryParameter("TemplateCode", "SMS_154950909");  //模板名称
         request.putQueryParameter("TemplateParam", JSONObject.toJSONString(map));  //验证码转换json数据
-
         try {
             CommonResponse response = client.getCommonResponse(request);
             System.out.println(response.getData());

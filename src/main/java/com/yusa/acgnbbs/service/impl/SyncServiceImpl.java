@@ -35,7 +35,7 @@ public class SyncServiceImpl implements SyncService {
     public void SyncPostNum() {
         LambdaQueryWrapper<User> userLambdaQueryWrapper =new LambdaQueryWrapper<>();
         List<User> users = userMapper.selectList(userLambdaQueryWrapper);
-        redisZSetRankUtil.init(USER_FAN_NUM_SET,1);
+        redisZSetRankUtil.init(USER_POST_NUM_SET,1);
         redisZSetRankUtil.batchDel();
         for (User user: users) {
             LambdaQueryWrapper<Post> lambdaQueryWrapper =new LambdaQueryWrapper<>();
@@ -51,7 +51,7 @@ public class SyncServiceImpl implements SyncService {
     public void SyncCommentNum() {
         LambdaQueryWrapper<User> userLambdaQueryWrapper =new LambdaQueryWrapper<>();
         List<User> users = userMapper.selectList(userLambdaQueryWrapper);
-        redisZSetRankUtil.init(USER_FAN_NUM_SET,1);
+        redisZSetRankUtil.init(USER_COMMENT_NUM_SET,1);
         redisZSetRankUtil.batchDel();
         for (User user: users) {
             LambdaQueryWrapper<Comment> lambdaQueryWrapper =new LambdaQueryWrapper<>();

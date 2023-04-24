@@ -23,11 +23,15 @@ public class ConstantPropertiesUtil implements InitializingBean {   //当项目�
 
     @Value("${aliyun.oss.file.bucketname}")
     private String bucketName;//项目名称
+    @Value("${spring.mail.username}")
+    private String fromEmail;//项目名称
 
     public static String END_POINT;
     public static String ACCESS_KEY_ID;
     public static String ACCESS_KEY_SECRET;
     public static String BUCKET_NAME;
+    public static String FROM_EMAIL;
+
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -35,6 +39,7 @@ public class ConstantPropertiesUtil implements InitializingBean {   //当项目�
         ACCESS_KEY_ID = keyId;
         ACCESS_KEY_SECRET = keySecret;
         BUCKET_NAME = bucketName;
+        FROM_EMAIL=fromEmail;
     }
 }
 

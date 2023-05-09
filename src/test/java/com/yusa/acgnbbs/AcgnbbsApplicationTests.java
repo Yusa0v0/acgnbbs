@@ -18,6 +18,8 @@ import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.text.SimpleDateFormat;
@@ -53,6 +55,17 @@ class AcgnbbsApplicationTests {
     RedisCache redisCache;
     @Autowired
     SyncService syncService;
+    @Test
+    public void testBCrypt(){
+        String password = "123456";
+        BCryptPasswordEncoder passwordEncoder=new BCryptPasswordEncoder();
+
+        String newPassword = passwordEncoder.encode(password);
+
+        System.out.println("加密密码为："+newPassword);
+        boolean matches = passwordEncoder.matches(password, newPassword);
+        System.out.println("两个密码一致:"+matches);
+    }
     @Test
     public void t(){
         // 签到
@@ -209,8 +222,8 @@ class AcgnbbsApplicationTests {
         LocalDateTime firstDayOfPreviousWeek = firstDayOfCurrentWeek.minusWeeks(1);
         // 输出上一星期的每一天的日期
         Random rand=new Random();
-        int min = 1000;
-        int max = 10000;
+        int min = 300;
+        int max = 1500;
         for (int i = 0; i < 7; i++) {
             LocalDateTime currentDay = firstDayOfPreviousWeek.plusDays(i);
             String keySuffix = currentDay.format(DateTimeFormatter.ofPattern("yyyyMMdd"));

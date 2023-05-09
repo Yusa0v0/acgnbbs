@@ -1,8 +1,10 @@
 package com.yusa.acgnbbs.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.yusa.acgnbbs.domain.LoginAdmin;
 import com.yusa.acgnbbs.domain.LoginUser;
 import com.yusa.acgnbbs.domain.ResponseResult;
+import com.yusa.acgnbbs.domain.entity.Admin;
 import com.yusa.acgnbbs.domain.entity.User;
 import com.yusa.acgnbbs.mapper.UserMapper;
 import com.yusa.acgnbbs.security.CustomAuthenticationToken;
@@ -27,6 +29,27 @@ public class LoginServiceImpl implements LoginService {
     RedisCache redisCache;
     @Autowired
     UserMapper userMapper;
+
+    @Override
+    public ResponseResult adminLogin(Admin admin) {
+        CustomAuthenticationToken customAuthenticationToken =new CustomAuthenticationToken(admin.getAdminName(),admin.getPassword());
+        Authentication authenticate= authenticationManager.authenticate(customAuthenticationToken);
+        if (Objects.isNull(authenticate)){
+            throw new RuntimeException("密码错误");
+        }
+        //生成jwt给前端
+        LoginAdmin loginAdmin =(LoginAdmin) (authenticate.getPrincipal());
+        Integer id = loginAdmin.getAdmin().getId();
+        String jwt = JwtUtils.createJWT(id.toString());
+        Map map =new HashMap<String,String>();
+        map.put("token",jwt);
+        map.put("userId",id);
+        System.out.println(loginAdmin);
+        redisCache.setCacheObject("login:"+id,loginAdmin);
+        //系统用户相关信息存放在redis
+        return new  ResponseResult(200,"登录成功",map);
+    }
+
     @Override
     public ResponseResult login(User user)  {
         //使用ProviderManager auth方法进行验证
@@ -35,8 +58,7 @@ public class LoginServiceImpl implements LoginService {
         //自定义 auth方法进行验证
 
         CustomAuthenticationToken customAuthenticationToken =new CustomAuthenticationToken(user.getUsername(),user.getPassword());
-        Authentication authenticate=null;
-        authenticate = authenticationManager.authenticate(customAuthenticationToken);
+        Authentication authenticate= authenticationManager.authenticate(customAuthenticationToken);
         if (Objects.isNull(authenticate)){
             throw new RuntimeException("密码错误");
         }
@@ -51,7 +73,6 @@ public class LoginServiceImpl implements LoginService {
         map.put("avatar",avatar);
         System.out.println(loginUser);
         redisCache.setCacheObject("login:"+id,loginUser);
-//        JwtUtils.
         //系统用户相关信息存放在redis
         return new  ResponseResult(200,"登录成功",map);
     }

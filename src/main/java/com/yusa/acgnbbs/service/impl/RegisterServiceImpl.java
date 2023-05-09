@@ -39,20 +39,10 @@ public class RegisterServiceImpl implements RegisterService {
         boolean registerType=false;
         LambdaQueryWrapper<User> lambdaQueryWrapper =new LambdaQueryWrapper<>();
         String serverCaptcha = redisCache.getCacheObject(phone).toString();
-//        多此一举了
-//        if(serverCode.length()<4){
-//            int len=4-serverCode.length();
-//            while (len>0) {
-//                serverCode = "0" + serverCode;
-//                len--;
-//            }
-//        }
         //如果验证码过期
         if(StringUtils.isEmpty(serverCaptcha)) {
             return new ResponseResult(200,"验证码过期",null);
         }
-        System.out.println(userCaptcha);
-        System.out.println(serverCaptcha);
         //校验手机号和邮箱格式正确性
         boolean checkPhone = RegexValidateUtil.checkPhone(phone);
         boolean checkEmail = RegexValidateUtil.checkEmail(phone);

@@ -1,6 +1,7 @@
 package com.yusa.acgnbbs.config;
 
 import com.yusa.acgnbbs.filter.JwtAuthenticationFilter;
+import com.yusa.acgnbbs.security.AdminCustomAuthenticationProvider;
 import com.yusa.acgnbbs.security.CustomAuthenticationProvider;
 import com.yusa.acgnbbs.security.CustomAuthenticationToken;
 import com.yusa.acgnbbs.service.impl.UserDetailsServiceImpl;
@@ -32,6 +33,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     JwtAuthenticationFilter jwtAuthenticationFilter;
     @Autowired
     CustomAuthenticationProvider customAuthenticationProvider;
+    @Autowired
+    AdminCustomAuthenticationProvider adminCustomAuthenticationProvider;
     @Autowired
     UserDetailsServiceImpl userDetailsService;
     @Bean
@@ -86,8 +89,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
                 .antMatchers("/statistics/**/").permitAll()
 
+                .antMatchers("/admin/**/").permitAll()
+
                 //webSocket也会被拦截
                 .antMatchers("/webSocket/**/").permitAll()
+
 
 //                .antMatchers("/user/login").anonymous()
                 // 除上面外的所有请求全部需要鉴权认证
@@ -111,7 +117,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 
+        authenticationManagerBuilder.authenticationProvider(adminCustomAuthenticationProvider);//自定义的
         authenticationManagerBuilder.authenticationProvider(customAuthenticationProvider);//自定义的
+
         authenticationManagerBuilder.authenticationProvider(authProvider());//原来默认的
 
         return authenticationManagerBuilder.build();

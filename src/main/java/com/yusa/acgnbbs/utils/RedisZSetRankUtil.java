@@ -95,7 +95,6 @@ public class RedisZSetRankUtil {
         System.out.println(this.key+start+end);
         Set<ZSetOperations.TypedTuple<String>> rangeWithScores = redisTemplate.opsForZSet().reverseRangeWithScores(this.key, start, end);
         String s = JSON.toJSONString(rangeWithScores);
-        System.out.println("获取到的排行和分数列表:" + s);
         return rangeWithScores;
     }
     // 获取单人排行

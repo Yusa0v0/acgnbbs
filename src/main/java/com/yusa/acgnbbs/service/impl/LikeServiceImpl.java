@@ -60,7 +60,7 @@ public class LikeServiceImpl implements LikeService {
         lambdaQueryWrapper.eq(Likes::getPostId,postId);
         List<Likes> likes = likesMapper.selectList(lambdaQueryWrapper);
         Boolean isLiked=true;
-        if(Objects.isNull(likes)){
+        if(likes.size()==0){
             isLiked=false;
         }
         return isLiked;

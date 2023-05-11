@@ -62,14 +62,14 @@ public class StatisticsServiceImpl implements StatisticsService {
         // 获取当前日期所在星期的第一天（星期一）的前一星期的第一天（即上一星期的星期一）的日期
         LocalDateTime firstDayOfPreviousWeek = firstDayOfCurrentWeek.minusWeeks(1);
         // 输出上一星期的每一天的日期
-        List<Integer> lastWeekCommentStatistics = new ArrayList<>();
+        List<Integer> lastWeekStatistics = new ArrayList<>();
         for (int i = 0; i < 7; i++) {
             LocalDateTime currentDay = firstDayOfPreviousWeek.plusDays(i);
             String keySuffix = currentDay.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
              Integer dailyCommentStatistics =(Integer) getDailyStatistics(key,keySuffix).getData();
-            lastWeekCommentStatistics.add(dailyCommentStatistics);
+            lastWeekStatistics.add(dailyCommentStatistics);
         }
         //2.1获取当前日期中的  年和月
-        return ResponseResult.okResult(lastWeekCommentStatistics);
+        return ResponseResult.okResult(lastWeekStatistics);
     }
 }

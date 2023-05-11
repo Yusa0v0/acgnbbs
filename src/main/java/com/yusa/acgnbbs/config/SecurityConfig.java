@@ -88,6 +88,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/swagger-ui.html").permitAll()
 
                 .antMatchers("/statistics/**/").permitAll()
+                .antMatchers("/forecast/**/").permitAll()
 
                 .antMatchers("/admin/**/").permitAll()
 
@@ -117,8 +118,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         AuthenticationManagerBuilder authenticationManagerBuilder =
                 http.getSharedObject(AuthenticationManagerBuilder.class);
 
-        authenticationManagerBuilder.authenticationProvider(adminCustomAuthenticationProvider);//自定义的
         authenticationManagerBuilder.authenticationProvider(customAuthenticationProvider);//自定义的
+        authenticationManagerBuilder.authenticationProvider(adminCustomAuthenticationProvider);//自定义的
 
         authenticationManagerBuilder.authenticationProvider(authProvider());//原来默认的
 

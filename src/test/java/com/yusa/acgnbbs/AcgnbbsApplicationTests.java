@@ -46,15 +46,38 @@ class AcgnbbsApplicationTests {
     RedisZSetRankUtil redisZSetRankUtil;
     @Autowired
     FollowService followService;
-    @Test
-    void contextLoads() {
-    }
+
     @Autowired
     PasswordEncoder passwordEncoder;
     @Autowired
     RedisCache redisCache;
     @Autowired
     SyncService syncService;
+
+    @Autowired
+    ForecastService forecastService;
+
+    //数据预测
+
+    @Test
+    void forecastS() {
+//        forecastService.getLastWeekForecast("");
+
+    }
+
+    @Test
+    void contextLoads() {
+        PasswordEncoder pe = new BCryptPasswordEncoder();
+        //加密
+        String encode = pe.encode("111111");
+        System.out.println(encode);
+        //比较密码
+        boolean matches = pe.matches("111111",encode);
+        System.out.println("===================================");
+        System.out.println(matches);
+    }
+
+
     @Test
     public void testBCrypt(){
         String password = "123456";
@@ -213,6 +236,11 @@ class AcgnbbsApplicationTests {
         System.out.println(statisticsService.getLastWeekStatistics(DAILY_COMMENT_STATISTICS_KEY).getData());
         System.out.println(statisticsService.getLastWeekStatistics(DAILY_USER_STATISTICS_KEY).getData());
     }
+
+
+    /**
+     * 随机生成数据
+     */
     @Test
     public void batchAddDaily() {
         LocalDateTime now = LocalDateTime.now();
@@ -222,18 +250,43 @@ class AcgnbbsApplicationTests {
         LocalDateTime firstDayOfPreviousWeek = firstDayOfCurrentWeek.minusWeeks(1);
         // 输出上一星期的每一天的日期
         Random rand=new Random();
-        int min = 300;
-        int max = 1500;
+        int min = 900;
+        int max = 1100;
         for (int i = 0; i < 7; i++) {
             LocalDateTime currentDay = firstDayOfPreviousWeek.plusDays(i);
             String keySuffix = currentDay.format(DateTimeFormatter.ofPattern("yyyyMMdd"));
             // 清零
-            redisTemplate.opsForValue().set(DAILY_COMMENT_STATISTICS_KEY+keySuffix,0);
-            redisTemplate.opsForValue().set(DAILY_USER_STATISTICS_KEY+keySuffix,0);
-            int i1 =  rand.nextInt(max - min + 1) + min;
-            statisticsService.increaseDailyStatisticsWithValue(DAILY_COMMENT_STATISTICS_KEY,keySuffix,i1);
-            int i2 =  rand.nextInt(max - min + 1) + min;
-            statisticsService.increaseDailyStatisticsWithValue(DAILY_USER_STATISTICS_KEY,keySuffix,i2);
+
+            //折线图
+//            redisTemplate.opsForValue().set(DAILY_COMMENT_STATISTICS_KEY+keySuffix,0);
+//            redisTemplate.opsForValue().set(DAILY_USER_STATISTICS_KEY+keySuffix,0);
+//            redisTemplate.opsForValue().set(NEW_USER_STATISTICS_KEY+keySuffix,0);
+            redisTemplate.opsForValue().set(USER_SIGN_STATISTICS_KEY+keySuffix,0);
+
+//            int i1 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(DAILY_COMMENT_STATISTICS_KEY,keySuffix,i1);
+//            int i2 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(DAILY_USER_STATISTICS_KEY,keySuffix,i2);
+//            int i7 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(NEW_USER_STATISTICS_KEY,keySuffix,i7);
+            int i8 =  rand.nextInt(max - min + 1) + min;
+            statisticsService.increaseDailyStatisticsWithValue(USER_SIGN_STATISTICS_KEY,keySuffix,i8);
+
+
+            // 各个跟类浏览量
+//            redisTemplate.opsForValue().set(ANIMATION_PAGE_VIEW_KEY+keySuffix,0);
+//            redisTemplate.opsForValue().set(COMIC_PAGE_VIEW_KEY+keySuffix,0);
+//            redisTemplate.opsForValue().set(GAME_PAGE_VIEW_KEY+keySuffix,0);
+//            redisTemplate.opsForValue().set(NOVEL_PAGE_VIEW_KEY+keySuffix,0);
+//            int i3 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(ANIMATION_PAGE_VIEW_KEY,keySuffix,i3);
+//            int i4 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(COMIC_PAGE_VIEW_KEY,keySuffix,i4);
+//            int i5 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(GAME_PAGE_VIEW_KEY,keySuffix,i5);
+//            int i6 =  rand.nextInt(max - min + 1) + min;
+//            statisticsService.increaseDailyStatisticsWithValue(NOVEL_PAGE_VIEW_KEY,keySuffix,i6);
+
 
         }
     }

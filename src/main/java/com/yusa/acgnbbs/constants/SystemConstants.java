@@ -31,11 +31,30 @@ public class SystemConstants {
     public static final String LINK_STATUS_NORMAL = "0";
 
 
-    public static final String USER_SIGN_KEY="sign:";
 
+    public static final String USER_SIGN_KEY="sign:";
+    /**
+     * 数据分析，对应后台首页的折线图
+     */
     public static final String DAILY_COMMENT_STATISTICS_KEY="dailyComment:";
 
     public static final String DAILY_USER_STATISTICS_KEY="dailyUser:";
+
+    public static final String NEW_USER_STATISTICS_KEY="newUser:";
+
+    public static final String USER_SIGN_STATISTICS_KEY="userSign:";
+
+    /**
+     * 页面浏览量
+     */
+    public static final String ANIMATION_PAGE_VIEW_KEY="animationPageView:";
+    public static final String COMIC_PAGE_VIEW_KEY="comicPageView:";
+    public static final String GAME_PAGE_VIEW_KEY="gamePageView:";
+    public static final String NOVEL_PAGE_VIEW_KEY="novelPageView:";
+
+
+
+
 
 
     /**
@@ -57,6 +76,8 @@ public class SystemConstants {
 
     public static final String USER_POST_NUM_SET="userPostNumSet";
     public static final String USER_COMMENT_NUM_SET="userCommentNumSet";
+
+
 
 
     public static final int SYSTEM_START_YEAR=2019;

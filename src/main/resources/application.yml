@@ -22,8 +22,8 @@ spring:
   mail:
     host: smtp.163.com
     port: 25
-    username: lww500wwl@163.com
-    password: UDRRPUTMCDVKHACR
+    username: 
+    password: 
     default-encoding: UTF-8
     properties:
       mail:
@@ -55,7 +55,7 @@ aliyun:
   oss:
     file:
       endpoint: oss-cn-hangzhou.aliyuncs.com
-      keyid: LTAI5tAk8D2qzbdS3eReCeSh
-      keysecret: rnja1HlrSWoq8NeyQAAY8i58dwEphk
-      bucketname: ruabit-acgnbbs
+      keyid: 
+      keysecret: 
+      bucketname: 
 
